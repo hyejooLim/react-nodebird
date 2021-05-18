@@ -25,7 +25,7 @@ const AppLayout = ({ children }) => {
           md: 작은 데스크탑
           gutter: 컬럼 사이의 간격
       */}
-      <Row>
+      <Row gutter={8}>
         <Col xs={24} md={6}>첫번째 컬럼</Col>
         <Col xs={24} md={12}>{children}</Col>
         <Col xs={24} md={6}>
