@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import { Menu } from 'antd';
+import { Menu, Input, Row, Col } from 'antd';
 
 const AppLayout = ({ children }) => {
   return (
@@ -14,10 +14,24 @@ const AppLayout = ({ children }) => {
           <Link href='/profile'><a>프로필</a></Link>
         </Menu.Item>
         <Menu.Item>
+          <Input.Search enterButton style={{ verticalAlign: 'middle' }} />
+        </Menu.Item>
+        <Menu.Item>
           <Link href='/signup'><a>회원가입</a></Link>
         </Menu.Item>
       </Menu>
-      {children}
+      {/* xs: 모바일
+          sm: 태블릿
+          md: 작은 데스크탑
+          gutter: 컬럼 사이의 간격
+      */}
+      <Row>
+        <Col xs={24} md={6}>첫번째 컬럼</Col>
+        <Col xs={24} md={12}>{children}</Col>
+        <Col xs={24} md={6}>
+          <a href="https://cherishvert.tistory.com" target="_blank" ref="noreferrer noopener">Made by Me</a>
+        </Col>
+      </Row>
     </div>
   );
 };
