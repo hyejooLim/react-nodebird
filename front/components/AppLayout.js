@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Menu, Input, Row, Col } from 'antd';
 
+import UserProfile from '../components/UserProfile';
+import LoginForm from '../components/LoginForm';
+
 const AppLayout = ({ children }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
     <div>
       <Menu mode='horizontal'>
@@ -26,10 +31,12 @@ const AppLayout = ({ children }) => {
           gutter: 컬럼 사이의 간격
       */}
       <Row gutter={8}>
-        <Col xs={24} md={6}>첫번째 컬럼</Col>
+        <Col xs={24} md={6}>
+          {isLoggedIn ? <UserProfile /> : <LoginForm />}
+        </Col>
         <Col xs={24} md={12}>{children}</Col>
         <Col xs={24} md={6}>
-          <a href="https://cherishvert.tistory.com" target="_blank" ref="noreferrer noopener">Made by Me</a>
+          <a href="https://cherishvert.tistory.com" target="_blank" rel="noreferrer noopener">Made by Me</a>
         </Col>
       </Row>
     </div>
