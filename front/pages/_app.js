@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
 import Head from 'next/head';
 
+import wrapper from '../store/configureStore';
+
+// Next-redux-wrapper에서 자동으로 Provider로 감싸줌
 const App = ({ Component }) => {
   return (
     <>
@@ -20,4 +23,4 @@ App.propTypes = {
   Component: PropTypes.elementType.isRequired,
 };
 
-export default App;
+export default wrapper.withRedux(App);
