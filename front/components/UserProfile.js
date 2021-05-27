@@ -3,7 +3,7 @@ import { Card, Avatar, Button } from 'antd';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 
-import { logoutAction } from '../reducers';
+import { logoutAction } from '../reducers/user';
 
 const CardWrapper = styled(Card)`
   text-align: center;
