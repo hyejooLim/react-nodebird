@@ -13,9 +13,9 @@ const PostForm = () => {
   const onSubmitForm = useCallback(() => {
     if (value !== ' ') {
       dispatch(addPost);
+      setValue('');
     }
-    setValue('');
-  }, []);
+  }, [value]);
 
   const onChangeInput = useCallback((e) => {
     setValue(e.target.value);
@@ -38,7 +38,7 @@ const PostForm = () => {
         placeholder='오늘은 어떤 일이 있었나요?'
       />
       <div>
-        <Input type='file' multiple hidden ref={imageInput} />
+        <input type='file' multiple hidden ref={imageInput} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
         <Button type='primary' htmlType='submit' style={{ float: 'right' }}>
           완료

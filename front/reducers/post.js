@@ -7,7 +7,7 @@ const initialState = {
         nickname: 'joo',
       },
       content: '첫 번째 게시글 #해시태그',
-      Image: [
+      Images: [
         {
           src: 'https://www.google.com/url?sa=i&url=https%3A%2F%2F1boon.kakao.com%2Fholapet%2Fholapet1150&psig=AOvVaw0UzmlLJk0uVm-CUC29Ii8G&ust=1622213389431000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPiVqfiN6vACFQAAAAAdAAAAABAD',
         },
