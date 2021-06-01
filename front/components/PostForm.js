@@ -1,8 +1,13 @@
 import React, { useCallback, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, Input } from 'antd';
+import styled from 'styled-components';
 
 import { addPost } from '../reducers/post';
+
+const ButtonWrapper = styled.div`
+  margin-top: 10px;
+`;
 
 const PostForm = () => {
   const { imagePaths } = useSelector((state) => state.post);
@@ -27,7 +32,7 @@ const PostForm = () => {
 
   return (
     <Form
-      style={{ margin: '10px 0 20px' }}
+      style={{ margin: '30px 0' }}
       encType='multipart/form-data'
       onFinish={onSubmitForm}
     >
@@ -36,14 +41,15 @@ const PostForm = () => {
         onChange={onChangeInput}
         maxLength={140}
         placeholder='오늘은 어떤 일이 있었나요?'
+        style={{ height: '100px', fontFamily: 'menlo' }}
       />
-      <div>
+      <ButtonWrapper>
         <input type='file' multiple hidden ref={imageInput} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
         <Button type='primary' htmlType='submit' style={{ float: 'right' }}>
           완료
         </Button>
-      </div>
+      </ButtonWrapper>
       <div>
         {imagePaths &&
           imagePaths.map((path) => (

@@ -5,11 +5,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const ListWrapper = styled(List)`
-  margin-bottom: 20px;
-`;
-
-const ListItem = styled(List.Item)`
-  margin-top: 20px;
+  margin: 20px 0;
 `;
 
 const FollowList = ({ header, data }) => {
@@ -22,11 +18,11 @@ const FollowList = ({ header, data }) => {
       bordered
       dataSource={data}
       renderItem={item => (
-        <ListItem>
+        <List.Item>
           <Card actions={[<StopOutlined key='stop' />]}>
             <Card.Meta description={item.nickname} />
           </Card>
-        </ListItem>
+        </List.Item>
       )}
     />
   )
