@@ -10,7 +10,7 @@ function logInAPI(data) {
 // put: action dispatch
 // take: 액션이 실행될 때까지 기다림
 
-// lonIn generator 
+// logIn generator 
 function* logIn(action) {
   try {
     const result = yield call(logInAPI, action.data); // logInAPI 함수에 action.data를 인자로 넘겨줌
@@ -30,7 +30,7 @@ function logOutAPI() {
   return axios.post('/api/logout'); // 서버에 로그인 요청 보냄
 }
 
-// lonOut generator 
+// logOut generator 
 function* logOut() {
   try {
     const result = yield call(logOutAPI);
