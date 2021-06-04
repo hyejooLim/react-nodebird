@@ -19,6 +19,12 @@ __••• 프로젝트에 관하여__
 * LoginForm </br>
 * NicknameEditForm </br>
 * UserProfile </br>
+* CommentForm </br>
+* PostCard </br>
+* PostCardContent </br>
+* PostForm </br>
+* PostImages </br>
+* ImageZoom </br>
 </br>
 
 ## 2. 페이지
