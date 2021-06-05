@@ -6,16 +6,16 @@ const initialState = {
         id: 1,
         nickname: 'joo',
       },
-      content: '첫 번째 게시글 #해시태그',
+      content: '첫 번째 게시글 #해시태그 #안녕',
       Images: [
         {
-          src: 'https://www.google.com/url?sa=i&url=https%3A%2F%2F1boon.kakao.com%2Fholapet%2Fholapet1150&psig=AOvVaw0UzmlLJk0uVm-CUC29Ii8G&ust=1622213389431000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPiVqfiN6vACFQAAAAAdAAAAABAD',
+          src: 'https://user-images.githubusercontent.com/71072930/120285755-8a209080-c2f8-11eb-9581-ece7b7d34fbf.jpeg',
         },
         {
-          src: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.hankookilbo.com%2FNews%2FRead%2FA2020091315250004591&psig=AOvVaw0UzmlLJk0uVm-CUC29Ii8G&ust=1622213389431000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPiVqfiN6vACFQAAAAAdAAAAABAI',
+          src: 'https://user-images.githubusercontent.com/71072930/120285868-a58b9b80-c2f8-11eb-8bf6-601a80c75090.jpeg',
         },
         {
-          src: 'https://www.google.com/url?sa=i&url=http%3A%2F%2Fm.blog.naver.com%2Fpetianbooks%2F221502212743&psig=AOvVaw0UzmlLJk0uVm-CUC29Ii8G&ust=1622213389431000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPiVqfiN6vACFQAAAAAdAAAAABAO',
+          src: 'https://user-images.githubusercontent.com/71072930/120285952-bcca8900-c2f8-11eb-8720-483689293e23.jpeg',
         },
       ],
       Comments: [
