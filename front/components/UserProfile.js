@@ -14,7 +14,7 @@ const ButtonWrapper = styled(Button)`
 `;
 
 const UserProfile = () => {
-  const { user, isLoggingOut } = useSelector((state) => state.user);
+  const { user, logOutLoading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const onLogOut = useCallback(() => {
     dispatch(logoutRequestAction());
@@ -33,7 +33,7 @@ const UserProfile = () => {
         title={user.nickname}
         description='Happy Day'
       />
-      <ButtonWrapper onClick={onLogOut} loading={isLoggingOut}>로그아웃</ButtonWrapper>
+      <ButtonWrapper onClick={onLogOut} loading={logOutLoading}>로그아웃</ButtonWrapper>
     </CardWrapper>
   );
 };
