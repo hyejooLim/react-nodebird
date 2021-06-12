@@ -1,3 +1,5 @@
+import shortid from "shortid";
+
 const initialState = {
   mainPosts: [
     {
@@ -32,8 +34,7 @@ const initialState = {
           content: '귀엽네요^^',
         },
       ],
-      // 업로드된 이미지 경로
-      imagePaths: [],
+      imagePaths: [], // 업로드된 이미지 경로
       addPostLoading: false,
       addPostDone: false,
       addPostError: null,
@@ -63,16 +64,25 @@ export const addComment = (data) => ({
   data,
 });
 
-const dummyPost = {
-  id: 2,
-  content: '더미데이터입니다.',
+const dummyPost = (data) => ({
+  id: shortid.generate(),
+  content: data,
   User: {
     id: 1,
     nickname: 'joo',
   },
   Image: [],
   Comments: [],
-};
+});
+
+const dummyComment = (data) => ({
+  id: shortid.generate(),
+  content: data,
+  User: {
+    id: 1,
+    nickname: 'joo',
+  }
+});
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -88,7 +98,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         addPostLoading: false,
         addPostDone: true,
-        mainPosts: [dummyPost, ...state.mainPosts],
+        mainPosts: [dummyPost(action.data), ...state.mainPosts],
       };
     case ADD_POST_FAILURE:
       return {
@@ -103,12 +113,19 @@ const reducer = (state = initialState, action) => {
         addCommentDone: false,
         addCommentError: null,
       };
-    case ADD_COMMENT_SUCCESS:
+    case ADD_COMMENT_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex((v) => v.id === action.data.postId);
+      const post = {...state.mainPosts[postIndex]};
+      post.Comments = [dummyComment(action.data.content), ...post.Comments];
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = post;
       return {
         ...state,
+        mainPosts,
         addCommentLoading: false,
         addCommentDone: true,
       };
+    }
     case ADD_COMMENT_FAILURE:
       return {
         ...state,

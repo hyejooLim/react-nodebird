@@ -9,7 +9,7 @@ import { addComment } from '../reducers/post';
 const CommentForm = ({ post }) => {
   const dispatch = useDispatch();
   const id = useSelector((state) => state.post.User?.id);
-  const { addCommentDone } = useSelector((state) => state.post);
+  const { addCommentLoading, addCommentDone } = useSelector((state) => state.post);
   const [commentText, onChangeCommentText, setCommentText] = useInput('');
 
   useEffect(() => {
@@ -20,20 +20,39 @@ const CommentForm = ({ post }) => {
 
   const onSubmitForm = useCallback(() => {
     dispatch(addComment({ content: commentText, postId: post.id, userId: id }));
-  }, [commentText, id]); 
+  }, [commentText, id]);
 
   return (
     <Form onFinish={onSubmitForm} style={{ marginTop: '10px' }}>
       <Form.Item>
-        <Input.TextArea rows={4} value={commentText} onChange={onChangeCommentText} />
-        <Button type='primary' htmlType='submit' style={{ float: 'right', marginTop: '10px' }}>삐약</Button>
+        <Input.TextArea
+          rows={4}
+          value={commentText}
+          onChange={onChangeCommentText}
+        />
+        <Button
+          type='primary'
+          htmlType='submit'
+          loading={addCommentLoading}
+          style={{ float: 'right', marginTop: '10px' }}
+        >
+          삐약
+        </Button>
       </Form.Item>
     </Form>
   );
-}
+};
 
 CommentForm.propTypes = {
-  post: PropTypes.arrayOf(PropTypes.object).isRequired
+  post: PropTypes.shape({
+    id: PropTypes.string,
+    User: PropTypes.object,
+    content: PropTypes.string,
+    Images: PropTypes.arrayOf(PropTypes.object),
+    Comments: PropTypes.arrayOf(PropTypes.object),
+    imagePaths: PropTypes.arrayOf(PropTypes.object),
+    postAdded: PropTypes.boolean,
+  }).isRequired,
 };
 
 export default CommentForm;
