@@ -1,8 +1,9 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, Input } from 'antd';
 import styled from 'styled-components';
 
+import useInput from '../hooks/useInput';
 import { addPost } from '../reducers/post';
 
 const ButtonWrapper = styled.div`
@@ -10,21 +11,21 @@ const ButtonWrapper = styled.div`
 `;
 
 const PostForm = () => {
-  const { imagePaths } = useSelector((state) => state.post);
   const dispatch = useDispatch();
-  const [value, setValue] = useState('');
+  const { imagePaths, addPostDone } = useSelector((state) => state.post);
+
+  const [postText, onChangePostText, setPostText] = useInput('');
   const imageInput = useRef();
+  
+  useEffect(() => {
+    if (addPostDone) {
+      setPostText('');
+    }
+  }, [addPostDone]);
 
   const onSubmitForm = useCallback(() => {
-    if (value !== ' ') {
-      dispatch(addPost);
-      setValue('');
-    }
-  }, [value]);
-
-  const onChangeInput = useCallback((e) => {
-    setValue(e.target.value);
-  }, []);
+    dispatch(addPost(postText));
+  }, [postText]);
 
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
@@ -37,8 +38,8 @@ const PostForm = () => {
       onFinish={onSubmitForm}
     >
       <Input.TextArea
-        value={value}
-        onChange={onChangeInput}
+        value={postText}
+        onChange={onChangePostText}
         maxLength={140}
         placeholder='오늘은 어떤 일이 있었나요?'
         style={{ height: '100px', fontFamily: 'menlo' }}

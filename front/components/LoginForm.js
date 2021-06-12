@@ -16,36 +16,37 @@ const FormWrapper = styled(Form)`
   font-family: 'menlo';
 `;
 
-const IdWrapper = styled.div`
+const EmailWrapper = styled.div`
   margin-bottom: 10px;
 `;
 
 const LoginForm = () => {
   const { logInLoading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const [id, onChangeId] = useInput('');
+  const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
   // onFinish already has 'e.preventDefault'
   const onSubmitForm = useCallback(() => {
-    console.log(id, password);
-    dispatch(loginRequestAction({ id, password }));
-  }, [id, password]);
+    console.log(email, password);
+    dispatch(loginRequestAction({ email, password }));
+  }, [email, password]);
 
   return (
     <>
       <FormWrapper onFinish={onSubmitForm}>
-        <IdWrapper>
-          <label htmlFor='user-id'>아이디</label>
+        <EmailWrapper>
+          <label htmlFor='user-email'>이메일</label>
           <br />
           <Input
-            name='user-id'
-            value={id}
-            onChange={onChangeId}
+            name='user-email'
+            value={email}
+            type='email'
+            onChange={onChangeEmail}
             placeholder='email'
             required
           />
-        </IdWrapper>
+        </EmailWrapper>
         <div>
           <label htmlFor='user-password'>비밀번호</label>
           <br />
