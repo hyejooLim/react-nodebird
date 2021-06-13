@@ -1,5 +1,6 @@
 import shortid from 'shortid';
 import produce from 'immer';
+import faker from 'faker';
 
 const initialState = {
   mainPosts: [
@@ -55,6 +56,26 @@ const initialState = {
     },
   ],
 };
+
+initialState.mainPosts = initialState.mainPosts.concat(Array(20).fill().map(() => ({
+  id: shortid.generate(),
+  User: {
+    id: shortid.generate(),
+    nickname: faker.name.findName(),
+  },
+  content: faker.lorem.paragraph(),
+  Images: [{
+    src: faker.image.image(),
+  }],
+  Comments: [{
+    id: shortid.generate(),
+    User: {
+      id: shortid.generate(),
+      nickname: faker.name.findName(),
+    },
+    content: faker.lorem.sentence(),
+  }],
+})))
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
