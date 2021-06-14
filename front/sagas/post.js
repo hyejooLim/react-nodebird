@@ -3,6 +3,9 @@ import axios from 'axios';
 import shortid from 'shortid';
 
 import {
+  LOAD_POSTS_REQUEST,
+  LOAD_POSTS_SUCCESS,
+  LOAD_POSTS_FAILURE,
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
   ADD_POST_FAILURE,
@@ -11,9 +14,31 @@ import {
   ADD_COMMENT_FAILURE,
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
-  REMOVE_POST_FAILURE
+  REMOVE_POST_FAILURE,
+  generateDummyPost
 } from '../reducers/post';
 import { ADD_POST_TO_USER, REMOVE_POST_FROM_USER } from '../reducers/user';
+
+function loadPostAPI(data) {
+  return axios.post('/api/post', data);
+}
+
+// loadPost generator
+function* loadPost(action) {
+  try {
+    // const result = yield call(loadPostAPI, action.data);
+    yield delay(1000);
+    yield put({
+      type: LOAD_POSTS_SUCCESS, 
+      data: generateDummyPost(10), // 게시물 10개씩 불러옴
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_POSTS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
 
 function addPostAPI(data) {
   return axios.post('/api/post', data);
@@ -90,6 +115,10 @@ function* addComment(action) {
   }
 }
 
+function* watchLoadPost() {
+  yield takeLatest(LOAD_POSTS_REQUEST, loadPost);
+}
+
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost);
 }
@@ -104,6 +133,7 @@ function* watchAddComment() {
 
 export default function* postSaga() {
   yield all([
+    fork(watchLoadPost), 
     fork(watchAddPost), 
     fork(watchRemovePost), 
     fork(watchAddComment)

@@ -3,61 +3,24 @@ import produce from 'immer';
 import faker from 'faker';
 
 const initialState = {
-  mainPosts: [
-    {
-      id: 1,
-      User: {
-        id: 1,
-        nickname: 'joo',
-      },
-      content: '첫 번째 게시글 #해시태그 #안녕',
-      Images: [
-        {
-          id: shortid.generate(),
-          src: 'https://user-images.githubusercontent.com/71072930/120285755-8a209080-c2f8-11eb-9581-ece7b7d34fbf.jpeg',
-        },
-        {
-          id: shortid.generate(),
-          src: 'https://user-images.githubusercontent.com/71072930/120285868-a58b9b80-c2f8-11eb-8bf6-601a80c75090.jpeg',
-        },
-        {
-          id: shortid.generate(),
-          src: 'https://user-images.githubusercontent.com/71072930/120285952-bcca8900-c2f8-11eb-8720-483689293e23.jpeg',
-        },
-      ],
-      Comments: [
-        {
-          id: shortid.generate(),
-          User: {
-            id: shortid.generate(),
-            nickname: 'jenny',
-          },
-          content: 'wow~ so cute!',
-        },
-        {
-          id: shortid.generate(),
-          User: {
-            id: shortid.generate(),
-            nickname: 'IU',
-          },
-          content: '귀엽네요^^',
-        },
-      ],
-      imagePaths: [], // 업로드된 이미지 경로
-      addPostLoading: false,
-      addPostDone: false,
-      addPostError: null,
-      removePostLoading: false,
-      removePostDone: false,
-      removePostError: null,
-      addCommentLoading: false,
-      addCommentDone: false,
-      addCommentError: null,
-    },
-  ],
+  mainPosts: [],
+  imagePaths: [], // 업로드된 이미지 경로
+  hasMorePosts: true, // 게시글을 더 불러올 지 여부
+  loadPostsLoading: false,
+  loadPostsDone: false,
+  loadPostsError: null,
+  addPostLoading: false,
+  addPostDone: false,
+  addPostError: null,
+  removePostLoading: false,
+  removePostDone: false,
+  removePostError: null,
+  addCommentLoading: false,
+  addCommentDone: false,
+  addCommentError: null,
 };
 
-initialState.mainPosts = initialState.mainPosts.concat(Array(20).fill().map(() => ({
+export const generateDummyPost = (number) => Array(number).fill().map(() => ({
   id: shortid.generate(),
   User: {
     id: shortid.generate(),
@@ -75,11 +38,15 @@ initialState.mainPosts = initialState.mainPosts.concat(Array(20).fill().map(() =
     },
     content: faker.lorem.sentence(),
   }],
-})))
+}));
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+
+export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
+export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
+export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
 
 export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
 export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
@@ -128,6 +95,21 @@ const dummyComment = (data) => ({
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => { // immer가 알아서 불변성 유지 (state -> draft)
     switch (action.type) {
+      case LOAD_POSTS_REQUEST:
+        draft.loadPostsLoading = true;
+        draft.loadPostsDone = false;
+        draft.loadPostsError = null;
+        break;
+      case LOAD_POSTS_SUCCESS:
+        draft.loadPostsLoading = false;
+        draft.loadPostsDone = true;
+        draft.mainPosts = draft.mainPosts.concat(action.data);
+        draft.hasMorePosts = draft.mainPosts.length < 50;
+        break;
+      case LOAD_POSTS_FAILURE:
+        draft.loadPostsLoading = false;
+        draft.loadPostsError = action.error;
+        break;
       case ADD_POST_REQUEST:
         draft.addPostLoading = true;
         draft.addPostDone = false;
