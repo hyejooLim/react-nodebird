@@ -10,9 +10,10 @@ import {
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PostImages from '../components/PostImages';
-import CommentForm from '../components/CommentForm';
+import PostImages from './PostImages';
+import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
+import FollowButton from './FollowButton';
 import { removePost } from '../reducers/post';
 
 const PostCard = ({ post }) => {
@@ -22,6 +23,7 @@ const PostCard = ({ post }) => {
 
   const id = useSelector((state) => state.user.user?.id); // optional chaining operator
   const { removePostLoading } = useSelector((state) => state.post);
+  const { user } = useSelector((state) => state.user);
 
   const onToggleLike = useCallback(() => {
     setLiked((prev) => !prev);
@@ -69,6 +71,7 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined key='ellipsis' />
           </Popover>,
         ]}
+        extra={user && <FollowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
@@ -102,7 +105,10 @@ const PostCard = ({ post }) => {
 PostCard.propTypes = {
   post: PropTypes.shape({
     id: PropTypes.number,
-    User: PropTypes.object,
+    User: PropTypes.shape({
+      id: PropTypes.number,
+      nickname: PropTypes.string,
+    }),
     content: PropTypes.string,
     Images: PropTypes.arrayOf(PropTypes.object),
     Comments: PropTypes.arrayOf(PropTypes.object),
