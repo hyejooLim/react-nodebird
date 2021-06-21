@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     // PostId
   }, {
     charset: 'utf8mb4',
-    collate: 'utf8_general_cimb4' 
+    collate: 'utf8mb4_general_ci' 
   });
   
   Comment.associate = (db) => {
