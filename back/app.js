@@ -1,5 +1,13 @@
 const express = require('express');
 const postRouter = require('./routes/post');
+const db = require('./models');
+
+// express에 sequelize 등록
+db.sequelize.sync()
+  .then(() => {
+    console.log('db conneted!!');
+  })
+  .catch(console.error);
 
 const app = express();
 
