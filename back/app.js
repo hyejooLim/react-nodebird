@@ -1,5 +1,8 @@
 const express = require('express');
+const cors = require('cors');
+
 const postRouter = require('./routes/post');
+const userRouter = require('./routes/user');
 const db = require('./models');
 
 // express에 sequelize 등록
@@ -10,6 +13,15 @@ db.sequelize.sync()
   .catch(console.error);
 
 const app = express();
+
+app.use(cors({
+  origin: true,
+  // credentials: false
+}));
+
+// req.body 안에 데이터 넣어줌
+app.use(express.json()); // json 형식으로 보낸 경우
+app.use(express.urlencoded({ extended: true })); // SubmitForm 으로 보낸 경우
 
 // url, method
 app.get('/', (req, res) => {
@@ -29,6 +41,7 @@ app.get('/posts', (req, res) => {
 });
 
 app.use('/post', postRouter);
+app.use('/user', userRouter);
 
 app.listen(3065, () => {
   console.log('server running');
