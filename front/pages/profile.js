@@ -12,7 +12,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (!(user && user.id)) {
-      Router.push('/');
+      Router.replace('/');
     }
   }, [user && user.id]);
 
