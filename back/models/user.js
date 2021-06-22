@@ -6,12 +6,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false, // 필수
       unique: true // 고유값
     },
-    nickname: {
-      type: DataTypes.STRING(30),
-      allowNull: false, // 필수
-    },
     password: {
       type: DataTypes.STRING(100),
+      allowNull: false, // 필수
+    },
+    nickname: {
+      type: DataTypes.STRING(30),
       allowNull: false, // 필수
     }
   }, {
