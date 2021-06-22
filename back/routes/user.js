@@ -15,7 +15,7 @@ router.post('/', async (req, res, next) => { // POST /user
       return res.status(403).send('이미 사용 중인 아이디입니다.');
     }
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    
+
     // 테이블 안에 데이터 삽입
     await User.create({ 
       email: req.body.email,
@@ -24,7 +24,7 @@ router.post('/', async (req, res, next) => { // POST /user
     });
     res.status(200).send('ok');
   } catch (error) {
-    console.log(error);
+    console.error(error);
     next(error); // status 500 (server error)
   }
 });
