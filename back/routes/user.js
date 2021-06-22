@@ -15,7 +15,7 @@ router.post('/login', (req, res, next) => {
     if (clientError) {
       return res.status(401).send(clientError.reason);
     }
-    
+
     // req.login 실행하면,
     // cookie 자동 생성
     // passport.serializeUser 실행 (user 정보가 들어감)
@@ -52,6 +52,12 @@ router.post('/', async (req, res, next) => { // POST /user
     console.error(error);
     next(error); // status 500 (server error)
   }
+});
+
+router.use('/logout', (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.send('ok');
 });
 
 module.exports = router;
