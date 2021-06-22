@@ -1,15 +1,23 @@
 // passport settings
 
 const passport = require('passport');
-const local = require('passport-local');
+const local = require('./local');
+const { User } = require('../models');
 
 module.exports = () => {
-  passport.serializeUser(() => {
-
+  passport.serializeUser((user, done) => {
+    done(null, user.id); // session에 id만 저장
   });
 
-  passport.deserializeUser(() => {
-
+  // 로그인 성공 이후 매번 실행 (DB로부터 사용자 정보 복구)
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const user = await User.findOne({ where: { id } });
+      done(null, user); // req.user에 user를 넣어줌
+    } catch (error) {
+      console.error(error);
+      done(error);
+    }
   });
 
   local();

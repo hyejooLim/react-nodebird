@@ -10,11 +10,15 @@ router.post('/login', (req, res, next) => {
   passport.authenticate('local', (serverError, user, clientError) => { // local.js 실행
     if (serverError) {
       console.error(serverError);
-      next(serverError);
+      return next(serverError);
     }
     if (clientError) {
       return res.status(401).send(clientError.reason);
     }
+    
+    // req.login 실행하면,
+    // cookie 자동 생성
+    // passport.serializeUser 실행 (user 정보가 들어감)
     return req.login(user, async (loginError) => {
       if (loginError) {
         console.error(loginError);
