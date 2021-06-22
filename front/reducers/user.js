@@ -51,9 +51,6 @@ export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 export const ADD_POST_TO_USER = 'ADD_POST_TO_USER';
 export const REMOVE_POST_FROM_USER = 'REMOVE_POST_FROM_USER';
 
-export const FOLLOW_USER = 'FOLLOW_USER';
-export const UNFOLLOW_USER = 'UNFOLLOW_USER';
-
 const dummyUser = (data) => ({
   ...data,
   nickname: 'joo',
@@ -88,7 +85,7 @@ const reducer = (state = initialState, action) => {
       case LOG_IN_SUCCESS:
         draft.logInLoading = false;
         draft.logInDone = true;
-        draft.user = dummyUser(action.data);
+        draft.user = action.data;
         break;
       case LOG_IN_FAILURE:
         draft.logInLoading = false;
@@ -168,10 +165,6 @@ const reducer = (state = initialState, action) => {
       case REMOVE_POST_FROM_USER:
         draft.user.Posts = draft.user.Posts.filter((v) => v.id !== action.data);
         break;
-      // case FOLLOW_USER:
-      //   draft.user.Followings.unshift({ nickname: action.data });
-      //   draft.followUser = true;
-      //   break;
       default:
         break;
     }
