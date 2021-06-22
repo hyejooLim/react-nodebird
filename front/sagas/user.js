@@ -10,7 +10,7 @@ import
 } from '../reducers/user';
 
 function logInAPI(data) {
-  return axios.post('/api/login', data); // 서버에 로그인 요청 보냄
+  return axios.post('http://localhost:3065/user/login', data); // 서버에 로그인 요청 보냄
 }
 
 // call: 동기 함수 호출 (promise > then)
@@ -21,11 +21,10 @@ function logInAPI(data) {
 // logIn generator
 function* logIn(action) {
   try {
-    //const result = yield call(logInAPI, action.data); // logInAPI 함수에 action.data를 인자로 넘겨줌
-    yield delay(1000); // 서버 없는 경우 비동기 효과
+    const result = yield call(logInAPI, action.data); // logInAPI 함수에 action.data를 인자로 넘겨줌
     yield put({
       type: LOG_IN_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     yield put({
