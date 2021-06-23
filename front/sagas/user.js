@@ -7,7 +7,28 @@ import
   SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE, 
   FOLLOW_REQUEST, FOLLOW_SUCCESS, FOLLOW_FAILURE, 
   UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS, UNFOLLOW_FAILURE,
+  LOAD_USER_INFO_REQUEST, LOAD_USER_INFO_SUCCESS, LOAD_USER_INFO_FAILURE
 } from '../reducers/user';
+
+function loadUserInfoAPI() {
+  return axios.get('/user'); 
+}
+
+// loadUserInfo generator
+function* loadUserInfo() {
+  try {
+    const result = yield call(loadUserInfoAPI);
+    yield put({
+      type: LOAD_USER_INFO_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_USER_INFO_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
 
 function logInAPI(data) {
   return axios.post('/user/login', data); // 서버에 로그인 요청 보냄
@@ -119,6 +140,10 @@ function* unfollow(action) {
 // takeLeading: 여러 번 요청했을 때 첫 번째 요청만 실행
 // takeLatest: 여러 번 요청했을 때 이전 요청이 로딩 중이라면, 마지막 요청만 실행 (서버에서는 중복 요청 확인해야 함)
 // throttle: 정해진 시간 동안 해당 액션 한 번 실행
+function* watchLoadUserInfo() {
+  yield takeLatest(LOAD_USER_INFO_REQUEST, loadUserInfo); // LOG_IN_REQUEST 액션이 실행되면 logIn generator 실행
+}
+
 function* watchLogIn() {
   yield takeLatest(LOG_IN_REQUEST, logIn); // LOG_IN_REQUEST 액션이 실행되면 logIn generator 실행
 }
@@ -141,6 +166,7 @@ function* watchUnfollow() {
 
 export default function* userSaga() {
   yield all([
+    fork(watchLoadUserInfo), 
     fork(watchLogIn), 
     fork(watchLogOut),
     fork(watchSignUp),

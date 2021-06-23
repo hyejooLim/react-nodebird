@@ -1,6 +1,9 @@
 import produce from 'immer';
 
 const initialState = {
+  loadUserInfoLoading: false, // 유저 정보 가져오기 시도 중
+  loadUserInfoDone: false,
+  loadUserInfoError: null,
   logInLoading: false, // 로그인 시도 중
   logInDone: false,
   logInError: null,
@@ -23,6 +26,10 @@ const initialState = {
   loginData: {},
   signUpData: {},
 };
+
+export const LOAD_USER_INFO_REQUEST = 'LOAD_USER_INFO_REQUEST';
+export const LOAD_USER_INFO_SUCCESS = 'LOAD_USER_INFO_SUCCESS';
+export const LOAD_USER_INFO_FAILURE = 'LOAD_USER_INFO_FAILURE';
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
@@ -77,6 +84,20 @@ export const logoutRequestAction = () => {
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      case LOAD_USER_INFO_REQUEST:
+        draft.loadUserInfoLoading = true;
+        draft.loadUserInfoDone = false;
+        draft.loadUserInfoError = null;
+        break;
+      case LOAD_USER_INFO_SUCCESS:
+        draft.loadUserInfoLoading = false;
+        draft.loadUserInfoDone = true;
+        draft.user = action.data;
+        break;
+      case LOAD_USER_INFO_FAILURE:
+        draft.loadUserInfoLoading = false;
+        draft.loadUserInfoError = action.error;
+        break;
       case LOG_IN_REQUEST:
         draft.logInLoading = true;
         draft.logInDone = false;

@@ -5,11 +5,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
 import { LOAD_POSTS_REQUEST } from '../reducers/post';
+import { LOAD_USER_INFO_REQUEST } from '../reducers/user';
 
 const Home = () => {
   const dispatch = useDispatch();
   const { logInDone } = useSelector((state) => state.user);
   const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector((state) => state.post);
+
+  useEffect(() => {
+    dispatch({ type: LOAD_USER_INFO_REQUEST });
+  }, []);
 
   useEffect(() => {
     dispatch({
