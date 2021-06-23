@@ -3,10 +3,11 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 
 const { User, Post } = require('../models');
+const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
-router.post('/login', (req, res, next) => {
+router.post('/login', isNotLoggedIn, (req, res, next) => {
   passport.authenticate('local', (serverError, user, clientError) => { // local.js 실행
     if (serverError) {
       console.error(serverError);
@@ -45,7 +46,7 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
-router.post('/', async (req, res, next) => { // POST /user
+router.post('/', isNotLoggedIn, async (req, res, next) => { // POST /user
   try {
     const exUser = await User.findOne({
       where: {
@@ -70,7 +71,7 @@ router.post('/', async (req, res, next) => { // POST /user
   }
 });
 
-router.use('/logout', (req, res) => {
+router.use('/logout', isLoggedIn, (req, res) => {
   req.logout();
   req.session.destroy();
   res.send('ok');
