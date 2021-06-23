@@ -23,7 +23,7 @@ passportConfig();
 const app = express();
 app.use(cors({
   origin: true,
-  // credentials: false
+  credentials: true
 }));
 
 // req.body 안에 데이터 넣어줌

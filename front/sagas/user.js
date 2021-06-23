@@ -10,7 +10,7 @@ import
 } from '../reducers/user';
 
 function logInAPI(data) {
-  return axios.post('http://localhost:3065/user/login', data); // 서버에 로그인 요청 보냄
+  return axios.post('/user/login', data); // 서버에 로그인 요청 보냄
 }
 
 // call: 동기 함수 호출 (promise > then)
@@ -35,7 +35,7 @@ function* logIn(action) {
 }
 
 function logOutAPI() {
-  return axios.post('http://localhost:3065/user/logout'); 
+  return axios.post('/user/logout'); 
 }
 
 // logOut generator
@@ -54,7 +54,7 @@ function* logOut() {
 }
 
 function signUpAPI(data) {
-  return axios.post('http://localhost:3065/user', data); 
+  return axios.post('/user', data); 
 }
 
 // signUp generator
