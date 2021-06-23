@@ -9,7 +9,7 @@ module.exports = () => {
     done(null, user.id); // session에 id만 저장
   });
 
-  // 로그인 성공 이후 매번 실행 (DB로부터 사용자 정보 복구)
+  // 라우터에 접근할 때마다 매번 실행 (DB로부터 사용자 정보 복구)
   passport.deserializeUser(async (id, done) => {
     try {
       const user = await User.findOne({ where: { id } });
