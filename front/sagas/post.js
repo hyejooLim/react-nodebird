@@ -1,6 +1,5 @@
 import { all, fork, put, delay, takeLatest, call } from 'redux-saga/effects';
 import axios from 'axios';
-import shortid from 'shortid';
 
 import {
   LOAD_POSTS_REQUEST,
@@ -14,23 +13,21 @@ import {
   ADD_COMMENT_FAILURE,
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
-  REMOVE_POST_FAILURE,
-  generateDummyPost
+  REMOVE_POST_FAILURE
 } from '../reducers/post';
 import { ADD_POST_TO_USER, REMOVE_POST_FROM_USER } from '../reducers/user';
 
 function loadPostAPI(data) {
-  return axios.post('/api/post', data);
+  return axios.get('/posts', data);
 }
 
 // loadPost generator
 function* loadPost(action) {
   try {
-    // const result = yield call(loadPostAPI, action.data);
-    yield delay(1000);
+    const result = yield call(loadPostAPI, action.data);
     yield put({
       type: LOAD_POSTS_SUCCESS, 
-      data: generateDummyPost(10), // 게시물 10개씩 불러옴
+      data: result.data
     });
   } catch (err) {
     yield put({
@@ -90,7 +87,7 @@ function* removePost(action) {
 }
 
 function addCommentAPI(data) {
-  return axios.post(`/${data.postId}/comment`, data);
+  return axios.post(`/post/${data.postId}/comment`, data);
 }
 
 // addComment generator

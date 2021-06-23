@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { Post, Comment, User, Image, Hashtag } = require('../models');
+const { Post, Comment, User, Image } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
@@ -14,9 +14,14 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
     const fullPost = await Post.findOne({
       where: { id: post.id },
       include: [{
-        model: User
+        model: User, // 게시글 작성자
+        attributes: ['id', 'nickname']
       }, {
-        model: Comment
+        model: Comment,
+        include: [{
+          model: User, // 댓글 작성자
+          attributes: ['id', 'nickname']
+        }]
       }, {
         model: Image
       }]
@@ -29,7 +34,7 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
   }
 });
 
-router.post('/:PostId/comment', isLoggedIn, async (req, res, next) => { // POST /post/${postId}/comment
+router.post('/:postId/comment', isLoggedIn, async (req, res, next) => { // POST /post/${postId}/comment
   try {
     const post = await Post.findOne({
       where: { id: req.params.postId },
@@ -39,11 +44,17 @@ router.post('/:PostId/comment', isLoggedIn, async (req, res, next) => { // POST 
     }
     const comment = await Comment.create({
       content: req.body.content,
-      PostId: req.params.postId,
-      UserId: req.body.userId,
+      PostId: parseInt(req.params.postId, 10),
+      UserId: req.user.id,
     });
-
-    res.status(201).json(comment);
+    const fullComment = await Comment.findOne({
+      where: { id: comment.id },
+      include: [{
+        model: User,
+        attributes: ['id', 'nickname']
+      }]
+    })
+    res.status(201).json(fullComment);
   } catch (error) {
     console.error(error);
     next(error);

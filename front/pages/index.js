@@ -17,9 +17,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    dispatch({
-      type: LOAD_POSTS_REQUEST,
-    })
+    dispatch({ type: LOAD_POSTS_REQUEST });
   }, []);
 
   useEffect(() => {
