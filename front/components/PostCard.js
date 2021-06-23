@@ -14,19 +14,29 @@ import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import FollowButton from './FollowButton';
-import { removePost } from '../reducers/post';
+import { removePost, LIKE_POST_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
-  const [liked, setLiked] = useState(false);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
 
   const id = useSelector((state) => state.user.user?.id); // optional chaining operator
   const { removePostLoading } = useSelector((state) => state.post);
   const { user } = useSelector((state) => state.user);
+  const liked = post.Likers.find((v) => v.id === id);
 
-  const onToggleLike = useCallback(() => {
-    setLiked((prev) => !prev);
+  const onLike = useCallback(() => {
+    dispatch({
+      type: LIKE_POST_REQUEST,
+      data: post.id
+    })
+  }, []);
+
+  const onUnLike = useCallback(() => {
+    dispatch({
+      type: UNLIKE_POST_REQUEST,
+      data: post.id
+    })
   }, []);
 
   const onToggleCommentForm = useCallback(() => {
@@ -40,17 +50,17 @@ const PostCard = ({ post }) => {
   return (
     <div style={{ marginBottom: '20px' }}>
       <Card
-        cover={post.Images && <PostImages images={post.Images} />}
+        cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
           <RetweetOutlined key='retweet' />,
           liked ? (
             <HeartTwoTone
               key='heart'
               twoToneColor='red'
-              onClick={onToggleLike}
+              onClick={onUnLike}
             />
           ) : (
-            <HeartOutlined key='heart' onClick={onToggleLike} />
+            <HeartOutlined key='heart' onClick={onLike} />
           ),
           <MessageOutlined key='message' onClick={onToggleCommentForm} />,
           <Popover
