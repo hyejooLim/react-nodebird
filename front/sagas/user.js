@@ -8,7 +8,10 @@ import
   CHANGE_NICKNAME_REQUEST, CHANGE_NICKNAME_SUCCESS, CHANGE_NICKNAME_FAILURE,
   FOLLOW_REQUEST, FOLLOW_SUCCESS, FOLLOW_FAILURE, 
   UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS, UNFOLLOW_FAILURE,
-  LOAD_USER_INFO_REQUEST, LOAD_USER_INFO_SUCCESS, LOAD_USER_INFO_FAILURE
+  LOAD_USER_INFO_REQUEST, LOAD_USER_INFO_SUCCESS, LOAD_USER_INFO_FAILURE,
+  LOAD_FOLLOWINGS_REQUEST, LOAD_FOLLOWINGS_SUCCESS, LOAD_FOLLOWINGS_FAILURE,
+  LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWERS_SUCCESS, LOAD_FOLLOWERS_FAILURE,
+  BLOCK_FOLLOWER_REQUEST, BLOCK_FOLLOWER_SUCCESS, BLOCK_FOLLOWER_FAILURE,
 } from '../reducers/user';
 
 function loadUserInfoAPI() {
@@ -26,6 +29,46 @@ function* loadUserInfo() {
   } catch (err) {
     yield put({
       type: LOAD_USER_INFO_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function loadFollowingsAPI() {
+  return axios.get('/user/followings'); 
+}
+
+// loadFollowings generator
+function* loadFollowings() {
+  try {
+    const result = yield call(loadFollowingsAPI);
+    yield put({
+      type: LOAD_FOLLOWINGS_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_FOLLOWINGS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function loadFollowersAPI() {
+  return axios.get('/user/followers'); 
+}
+
+// loadFollowers generator
+function* loadFollowers() {
+  try {
+    const result = yield call(loadFollowersAPI);
+    yield put({
+      type: LOAD_FOLLOWERS_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_FOLLOWERS_FAILURE,
       error: err.response.data,
     });
   }
@@ -114,18 +157,17 @@ function* changeNickname(action) {
   }
 }
 
-function followAPI() {
-  return axios.post('/api/follow'); 
+function followAPI(data) {
+  return axios.patch(`/user/${data}/follow`); 
 }
 
 // follow generator
 function* follow(action) {
   try {
-    // const result = yield call(followAPI);
-    yield delay(1000);
+    const result = yield call(followAPI, action.data);
     yield put({
       type: FOLLOW_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     yield put({
@@ -135,22 +177,41 @@ function* follow(action) {
   }
 }
 
-function unfollowAPI() {
-  return axios.post('/api/unfollow'); 
+function unfollowAPI(data) {
+  return axios.delete(`/user/${data}/unfollow`); 
 }
 
 // unfollow generator
 function* unfollow(action) {
   try {
-    // const result = yield call(unfollowAPI);
-    yield delay(1000);
+    const result = yield call(unfollowAPI, action.data);
     yield put({
       type: UNFOLLOW_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     yield put({
       type: UNFOLLOW_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function blockFollowerAPI(data) {
+  return axios.delete(`/user/${data}/follower`); 
+}
+
+// blockFollower generator
+function* blockFollower(action) {
+  try {
+    const result = yield call(blockFollowerAPI, action.data);
+    yield put({
+      type: BLOCK_FOLLOWER_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: BLOCK_FOLLOWER_FAILURE,
       error: err.response.data,
     });
   }
@@ -161,7 +222,15 @@ function* unfollow(action) {
 // takeLatest: 여러 번 요청했을 때 이전 요청이 로딩 중이라면, 마지막 요청만 실행 (서버에서는 중복 요청 확인해야 함)
 // throttle: 정해진 시간 동안 해당 액션 한 번 실행
 function* watchLoadUserInfo() {
-  yield takeLatest(LOAD_USER_INFO_REQUEST, loadUserInfo); // LOG_IN_REQUEST 액션이 실행되면 logIn generator 실행
+  yield takeLatest(LOAD_USER_INFO_REQUEST, loadUserInfo); 
+}
+
+function* watchLoadFollowings() {
+  yield takeLatest(LOAD_FOLLOWINGS_REQUEST, loadFollowings); 
+}
+
+function* watchLoadFollowers() {
+  yield takeLatest(LOAD_FOLLOWERS_REQUEST, loadFollowers); 
 }
 
 function* watchLogIn() {
@@ -188,14 +257,21 @@ function* watchUnfollow() {
   yield takeLatest(UNFOLLOW_REQUEST, unfollow);
 }
 
+function* watchBlockFollower() {
+  yield takeLatest(BLOCK_FOLLOWER_REQUEST, blockFollower);
+}
+
 export default function* userSaga() {
   yield all([
     fork(watchLoadUserInfo), 
+    fork(watchLoadFollowings), 
+    fork(watchLoadFollowers), 
     fork(watchLogIn), 
     fork(watchLogOut),
     fork(watchSignUp),
     fork(watchChangeNickname),
     fork(watchFollow),
     fork(watchUnfollow),
+    fork(watchBlockFollower),
   ]);
 }
