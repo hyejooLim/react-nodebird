@@ -58,15 +58,6 @@ export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 export const ADD_POST_TO_USER = 'ADD_POST_TO_USER';
 export const REMOVE_POST_FROM_USER = 'REMOVE_POST_FROM_USER';
 
-const dummyUser = (data) => ({
-  ...data,
-  nickname: 'joo',
-  id: 1,
-  Posts: [{ id: 1 }],
-  Followings: [{ nickname: 'jenny' }, { nickname: 'IU' }, { nickname: 'Jin' }],
-  Followers: [{ nickname: 'jenny' }, { nickname: 'IU' }, { nickname: 'Jin' }],
-});
-
 // Action creator
 export const loginRequestAction = (data) => {
   return {
@@ -184,7 +175,7 @@ const reducer = (state = initialState, action) => {
         draft.user.Posts.unshift({ id: action.data });
         break;
       case REMOVE_POST_FROM_USER:
-        draft.user.Posts = draft.user.Posts.filter((v) => v.id !== action.data);
+        draft.user.Posts = draft.user.Posts.filter((v) => v.id !== action.data.PostId);
         break;
       default:
         break;
