@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import useInput from '../hooks/useInput';
 import { addPost } from '../reducers/post';
+import { UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE } from '../reducers/post';
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -24,12 +25,39 @@ const PostForm = () => {
   }, [addPostDone]);
 
   const onSubmitForm = useCallback(() => {
-    dispatch(addPost(postText));
-  }, [postText]);
+    if (!postText || !postText.trim()) {
+      return alert('게시글을 작성하세요.');
+    }
+    const formData = new FormData();
+    imagePaths.forEach((path) => {
+      formData.append('image', path);
+    });
+    formData.append('text', postText);
+    dispatch(addPost(formData));
+  }, [postText, imagePaths]);
 
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
   }, [imageInput.current]);
+
+  const onChangeImages = useCallback((e) => {
+    console.log('images', e.target.files);
+    const imageFormData = new FormData();
+    [].forEach.call(e.target.files, (f) => {
+      imageFormData.append('image', f);
+    });
+    dispatch({
+      type: UPLOAD_IMAGES_REQUEST,
+      data: imageFormData
+    })
+  }, []);
+
+  const onRemoveImage = useCallback((idx) => () => {
+    dispatch({
+      type: REMOVE_IMAGE,
+      data: idx
+    })
+  }, []);
 
   return (
     <Form
@@ -45,7 +73,7 @@ const PostForm = () => {
         style={{ height: '100px', fontFamily: 'menlo' }}
       />
       <ButtonWrapper>
-        <input type='file' multiple hidden ref={imageInput} />
+        <input type='file' name='image' multiple hidden ref={imageInput} onChange={onChangeImages} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
         <Button type='primary' htmlType='submit' style={{ float: 'right' }}>
           완료
@@ -53,11 +81,11 @@ const PostForm = () => {
       </ButtonWrapper>
       <div>
         {imagePaths &&
-          imagePaths.map((path) => (
+          imagePaths.map((path, idx) => (
             <div key={path} style={{ display: 'inline-block' }}>
-              <img src={path} style={{ width: '200px' }} alt={path} />
+              <img src={`http://localhost:3065/${path}`} style={{ width: '200px' }} alt={path} />
               <div>
-                <Button>업로드 취소</Button>
+                <Button onClick={onRemoveImage(idx)}>업로드 취소</Button>
               </div>
             </div>
           ))}

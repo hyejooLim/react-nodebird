@@ -1,16 +1,50 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path'); // node 에서 제공
+const fs = require('fs');
 
 const { Post, Comment, User, Image } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
-router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
+try {
+  fs.accessSync('uploads');
+} catch (error) {
+  console.log('uploads 폴더를 생성합니다.');
+  fs.mkdirSync('uploads'); // 'uploads' 폴더가 없으면 생성
+}
+
+// form 마다 형식이 다르기 때문에 라우터마다 별도 세팅
+const upload = multer({
+  storage: multer.diskStorage({ // 하드디스크에 저장
+    destination(req, file, done) {
+      done(null, 'uploads');
+    },
+    filename(req, file, done) {
+      const ext = path.extname(file.originalname); // 확장자 추출(.png)
+      const basename = path.basename(file.originalname, ext); // 파일명 추출
+      done(null, basename + '_' + new Date().getTime() + ext);
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
+});
+
+router.post('/', isLoggedIn, upload.none(), async (req, res, next) => { // POST /post
   try {
     const post = await Post.create({
-      content: req.body.content,
+      content: req.body.text,
       UserId: req.user.id
     });
+    if (req.body.image) { 
+      if (Array.isArray(req.body.image)) { // 이미지가 여러 장인 경우 image: [image1.png, image2.png]
+        const images = await Promise.all(req.body.image.map((image) => Image.create({ src: image })));
+        await post.addImages(images);
+      } else { // 이미지가 한 장인 경우 image: image.png
+      const image = await Image.create({ src: req.body.image });
+      await post.addImages(image);
+      }
+    }
     const fullPost = await Post.findOne({
       where: { id: post.id },
       include: [{
@@ -36,6 +70,11 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
     console.error(error);
     next(error);
   }
+});
+
+router.post('/images', isLoggedIn, upload.array('image'), (req, res, next) => { // POST /post/images
+  console.log(req.files); // 이미지 업로드 정보
+  res.status(200).json(req.files.map((v) => v.filename));
 });
 
 router.post('/:postId/comment', isLoggedIn, async (req, res, next) => { // POST /post/${postId}/comment
