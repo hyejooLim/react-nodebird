@@ -16,6 +16,9 @@ const initialState = {
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
+  retweetPostLoading: false,
+  retweetPostDone: false,
+  retweetPostError: null,
   likePostLoading: false,
   likePostDone: false,
   likePostError: null,
@@ -42,6 +45,10 @@ export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
+
+export const RETWEET_POST_REQUEST = 'RETWEET_POST_REQUEST';
+export const RETWEET_POST_SUCCESS = 'RETWEET_POST_SUCCESS';
+export const RETWEET_POST_FAILURE = 'RETWEET_POST_FAILURE';
 
 export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
 export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
@@ -150,6 +157,20 @@ const reducer = (state = initialState, action) => {
       case ADD_COMMENT_FAILURE:
         draft.addCommentLoading = false;
         draft.addCommentError = action.error;
+        break;
+      case RETWEET_POST_REQUEST:
+        draft.retweetPostLoading = true;
+        draft.retweetPostDone = false;
+        draft.retweetPostError = null;
+        break;
+      case RETWEET_POST_SUCCESS:
+        draft.retweetPostLoading = false;
+        draft.retweetPostDone = true;
+        draft.mainPosts.unshift(action.data);
+        break;
+      case RETWEET_POST_FAILURE:
+        draft.retweetPostLoading = false;
+        draft.retweetPostError = action.error;
         break;
       case LIKE_POST_REQUEST:
         draft.likePostLoading = true;

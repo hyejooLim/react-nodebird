@@ -9,8 +9,14 @@ import { LOAD_USER_INFO_REQUEST } from '../reducers/user';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { logInDone } = useSelector((state) => state.user);
-  const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector((state) => state.post);
+  const { user } = useSelector((state) => state.user);
+  const { mainPosts, hasMorePosts, loadPostsLoading, retweetPostError } = useSelector((state) => state.post);
+
+  useEffect(() => {
+    if (retweetPostError) {
+      alert(retweetPostError);
+    }
+  }, [retweetPostError]);
 
   useEffect(() => {
     dispatch({ type: LOAD_USER_INFO_REQUEST });
@@ -38,7 +44,7 @@ const Home = () => {
 
   return (
     <AppLayout>
-      {logInDone && <PostForm />}
+      {user && <PostForm />}
       {mainPosts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}

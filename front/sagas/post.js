@@ -17,6 +17,9 @@ import {
   ADD_COMMENT_REQUEST,
   ADD_COMMENT_SUCCESS,
   ADD_COMMENT_FAILURE,
+  RETWEET_POST_REQUEST,
+  RETWEET_POST_SUCCESS,
+  RETWEET_POST_FAILURE,
   LIKE_POST_REQUEST,
   LIKE_POST_SUCCESS,
   LIKE_POST_FAILURE,
@@ -110,6 +113,26 @@ function* addComment(action) {
   }
 }
 
+function retweetPostAPI(data) {
+  return axios.post(`/post/${data}/retweet`);
+}
+
+// retweetPost generator
+function* retweetPost(action) {
+  try {
+    const result = yield call(retweetPostAPI, action.data);
+    yield put({
+      type: RETWEET_POST_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    yield put({
+      type: RETWEET_POST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 function likePostAPI(data) {
   return axios.patch(`/post/${data}/like`);
 }
@@ -190,6 +213,10 @@ function* watchAddComment() {
   yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
 
+function* watchRetweetPost() {
+  yield takeLatest(RETWEET_POST_REQUEST, retweetPost);
+}
+
 function* watchLikePost() {
   yield takeLatest(LIKE_POST_REQUEST, likePost);
 }
@@ -208,6 +235,7 @@ export default function* postSaga() {
     fork(watchAddPost), 
     fork(watchUploadImages), 
     fork(watchAddComment),
+    fork(watchRetweetPost), 
     fork(watchLikePost), 
     fork(watchUnlikePost),
     fork(watchRemovePost) 
