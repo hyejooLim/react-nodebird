@@ -8,20 +8,41 @@ import
   CHANGE_NICKNAME_REQUEST, CHANGE_NICKNAME_SUCCESS, CHANGE_NICKNAME_FAILURE,
   FOLLOW_REQUEST, FOLLOW_SUCCESS, FOLLOW_FAILURE, 
   UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS, UNFOLLOW_FAILURE,
+  LOAD_MY_INFO_REQUEST, LOAD_MY_INFO_SUCCESS, LOAD_MY_INFO_FAILURE,
   LOAD_USER_INFO_REQUEST, LOAD_USER_INFO_SUCCESS, LOAD_USER_INFO_FAILURE,
   LOAD_FOLLOWINGS_REQUEST, LOAD_FOLLOWINGS_SUCCESS, LOAD_FOLLOWINGS_FAILURE,
   LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWERS_SUCCESS, LOAD_FOLLOWERS_FAILURE,
   BLOCK_FOLLOWER_REQUEST, BLOCK_FOLLOWER_SUCCESS, BLOCK_FOLLOWER_FAILURE,
 } from '../reducers/user';
 
-function loadUserInfoAPI() {
+function loadMyInfoAPI() {
   return axios.get('/user'); 
 }
 
-// loadUserInfo generator
-function* loadUserInfo() {
+// loadMyInfo generator
+function* loadMyInfo() {
   try {
-    const result = yield call(loadUserInfoAPI);
+    const result = yield call(loadMyInfoAPI);
+    yield put({
+      type: LOAD_MY_INFO_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_MY_INFO_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function loadUserInfoAPI(data) {
+  return axios.get(`/user/${data}`); 
+}
+
+// loadUserInfo generator
+function* loadUserInfo(action) {
+  try {
+    const result = yield call(loadUserInfoAPI, action.data);
     yield put({
       type: LOAD_USER_INFO_SUCCESS,
       data: result.data
@@ -221,6 +242,10 @@ function* blockFollower(action) {
 // takeLeading: 여러 번 요청했을 때 첫 번째 요청만 실행
 // takeLatest: 여러 번 요청했을 때 이전 요청이 로딩 중이라면, 마지막 요청만 실행 (서버에서는 중복 요청 확인해야 함)
 // throttle: 정해진 시간 동안 해당 액션 한 번 실행
+function* watchLoadMyInfo() {
+  yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo); 
+}
+
 function* watchLoadUserInfo() {
   yield takeLatest(LOAD_USER_INFO_REQUEST, loadUserInfo); 
 }
@@ -263,6 +288,7 @@ function* watchBlockFollower() {
 
 export default function* userSaga() {
   yield all([
+    fork(watchLoadMyInfo), 
     fork(watchLoadUserInfo), 
     fork(watchLoadFollowings), 
     fork(watchLoadFollowers), 
