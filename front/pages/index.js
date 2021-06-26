@@ -30,8 +30,10 @@ const Home = () => {
     function onScroll() {
       if (document.documentElement.scrollHeight - 400 < window.scrollY + document.documentElement.clientHeight) {
         if (hasMorePosts && !loadPostsLoading) {
+          const lastId = mainPosts[mainPosts.length - 1]?.id;
           dispatch({
             type: LOAD_POSTS_REQUEST,
+            lastId
           })
         }
       }
@@ -40,7 +42,7 @@ const Home = () => {
     return () => {
       window.removeEventListener('scroll', onScroll);
     }
-  }, [hasMorePosts, loadPostsLoading]);
+  }, [hasMorePosts, loadPostsLoading, mainPosts]);
 
   return (
     <AppLayout>
