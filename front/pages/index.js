@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import AppLayout from '../components/AppLayout';
 import { useDispatch, useSelector } from 'react-redux';
 import { END } from 'redux-saga';
+import axios from 'axios';
 
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
 import { LOAD_POSTS_REQUEST } from '../reducers/post';
-import { LOAD_USER_INFO_REQUEST } from '../reducers/user';
+import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
 import wrapper from '../store/configureStore';
 
 const Home = () => {
@@ -49,10 +50,16 @@ const Home = () => {
 };
 
 // Home 컴포넌트보다 먼저 실행되어 데이터가 채워진 상태로 렌더링됨 (SSR)
+// SSR의 경우 브라우저가 개입하지 않으므로 프론트 서버에서 백엔드 서버로 쿠키를 보내줘야 함
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-  // console.log(`context ${context}`);
+  const cookie = context.req ? context.req.headers.cookie : '';
+  axios.defaults.headers.Cookie = '';
+  if (context.req && cookie) { // 쿠키가 공유되는 문제 방지
+    axios.defaults.headers.Cookie = cookie;
+  }
+
   context.store.dispatch({
-    type: LOAD_USER_INFO_REQUEST
+    type: LOAD_MY_INFO_REQUEST
   });
   context.store.dispatch({ 
     type: LOAD_POSTS_REQUEST 
