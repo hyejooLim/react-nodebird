@@ -2,6 +2,9 @@ import { all, fork, put, takeLatest, throttle, call } from 'redux-saga/effects';
 import axios from 'axios';
 
 import {
+  LOAD_POST_REQUEST,
+  LOAD_POST_SUCCESS,
+  LOAD_POST_FAILURE,
   LOAD_POSTS_REQUEST,
   LOAD_POSTS_SUCCESS,
   LOAD_POSTS_FAILURE,
@@ -28,6 +31,26 @@ import {
   UNLIKE_POST_FAILURE
 } from '../reducers/post';
 import { ADD_POST_TO_USER, REMOVE_POST_FROM_USER } from '../reducers/user';
+
+function loadPostAPI(data) {
+  return axios.get(`/post/${data}`);
+}
+
+// loadPost generator
+function* loadPost(action) {
+  try {
+    const result = yield call(loadPostAPI, action.data);
+    yield put({
+      type: LOAD_POST_SUCCESS, 
+      data: result.data
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_POST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
 
 function loadPostsAPI(lastId) {
   return axios.get(`/posts?lastId=${lastId}`);
@@ -197,6 +220,10 @@ function* removePost(action) {
   }
 };
 
+function* watchLoadPost() {
+  yield throttle(5000, LOAD_POST_REQUEST, loadPost);
+}
+
 function* watchLoadPosts() {
   yield throttle(5000, LOAD_POSTS_REQUEST, loadPosts);
 }
@@ -231,6 +258,7 @@ function* watchRemovePost() {
 
 export default function* postSaga() {
   yield all([
+    fork(watchLoadPost), 
     fork(watchLoadPosts), 
     fork(watchAddPost), 
     fork(watchUploadImages), 
