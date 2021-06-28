@@ -11,12 +11,12 @@ const ListWrapper = styled(List)`
   margin: 20px 0;
 `;
 
-const FollowList = ({ header, data }) => {
+const FollowList = ({ header, data, onClickMore, loading }) => {
   const dispatch = useDispatch();
 
   const onCancel = (id) => () => {
     if (header === '팔로잉 목록') {
-      dispatch({ 
+      dispatch({
         type: UNFOLLOW_REQUEST,
         data: id,
       });
@@ -28,27 +28,37 @@ const FollowList = ({ header, data }) => {
   };
 
   return (
-    <ListWrapper 
+    <ListWrapper
       grid={{ gutter: 4, xs: 2, md: 3 }}
       size='small'
       header={<div>{header}</div>}
-      loadMore={<div style={{ textAlign: 'center', margin: '10px 0' }}><Button>더 보기</Button></div>}
+      loadMore={
+        <div style={{ textAlign: 'center', margin: '10px 0' }}>
+          <Button onClick={onClickMore} loading={loading}>
+            더 보기
+          </Button>
+        </div>
+      }
       bordered
       dataSource={data}
-      renderItem={item => (
+      renderItem={(item) => (
         <List.Item>
-          <Card actions={[<StopOutlined key='stop' onClick={onCancel(item.id)} />]}>
+          <Card
+            actions={[<StopOutlined key='stop' onClick={onCancel(item.id)} />]}
+          >
             <Card.Meta description={item.nickname} />
           </Card>
         </List.Item>
       )}
     />
-  )
-}
+  );
+};
 
 FollowList.propTypes = {
   header: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(PropTypes.string).isRequired
+  data: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onClickMore: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default FollowList;
