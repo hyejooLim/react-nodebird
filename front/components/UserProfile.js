@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { Card, Avatar, Button } from 'antd';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
+import Link from 'next/link';
 
 import { logoutRequestAction } from '../reducers/user';
 
@@ -23,13 +24,17 @@ const UserProfile = () => {
   return (
     <CardWrapper
       actions={[
-        <div key='twit'>게시물<br />{user.Posts.length}</div>,
-        <div key='followings'>팔로잉<br />{user.Followings.length}</div>,
-        <div key='followers'>팔로워<br />{user.Followers.length}</div>,
+        <Link href={`/user/${user.id}`}><a><div key='twit'>게시물<br />{user.Posts.length}</div></a></Link>,
+        <Link href='/profile'><a><div key='followings'>팔로잉<br />{user.Followings.length}</div></a></Link>,
+        <Link href='/profile'><a><div key='followers'>팔로워<br />{user.Followers.length}</div></a></Link>,
       ]}
     >
       <Card.Meta
-        avatar={<Avatar>{user.nickname[0]}</Avatar>}
+        avatar={(
+          <Link href={`/user/${user.id}`}>
+            <a><Avatar>{user.nickname[0]}</Avatar></a>
+          </Link>
+        )}
         title={user.nickname}
         description='Happy Day'
       />
