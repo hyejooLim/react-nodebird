@@ -78,10 +78,11 @@ const User = () => {
             description='웹 개발자'
           />
         </Card>
-      ) : null}
-      {mainPosts.map((post) => {
+      ) 
+      : null}
+      {mainPosts && mainPosts.map((post) => (
         <PostCard key={post.id} post={post} />
-      })}
+      ))}
     </AppLayout>
   );
 };
@@ -97,12 +98,12 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
     type: LOAD_MY_INFO_REQUEST
   });
   context.store.dispatch({
-    type: LOAD_USER_POSTS_REQUEST,
-    data: context.params.id,
+    type: LOAD_USER_INFO_REQUEST,
+    data: context.query.id,
   });
   context.store.dispatch({
-    type: LOAD_USER_INFO_REQUEST,
-    data: context.params.id,
+    type: LOAD_USER_POSTS_REQUEST,
+    data: context.query.id,
   });
 
   context.store.dispatch(END);
