@@ -39,30 +39,32 @@ const Hashtag = () => {
 
   return (
     <AppLayout>
-      {mainPosts.map((post) => {
-        <PostCard key={post.id} post={post} />
-      })}
+      {mainPosts &&
+        mainPosts.map((post) => <PostCard key={post.id} post={post} />
+      )}
     </AppLayout>
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-  const cookie = context.req ? context.req.headers.cookie : '';
-  axios.defaults.headers.Cookie = '';
-  if (context.req && cookie) {
-    axios.defaults.headers.Cookie = cookie;
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (context) => {
+    const cookie = context.req ? context.req.headers.cookie : '';
+    axios.defaults.headers.Cookie = '';
+    if (context.req && cookie) {
+      axios.defaults.headers.Cookie = cookie;
+    }
+
+    context.store.dispatch({
+      type: LOAD_MY_INFO_REQUEST,
+    });
+    context.store.dispatch({
+      type: LOAD_HASHTAG_POSTS_REQUEST,
+      data: context.query.tag,
+    });
+
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
   }
-
-  context.store.dispatch({
-    type: LOAD_MY_INFO_REQUEST
-  });
-  context.store.dispatch({
-    type: LOAD_HASHTAG_POSTS_REQUEST,
-    data: context.params.tag,
-  });
-
-  context.store.dispatch(END);
-  await context.store.sagaTask.toPromise();
-});
+);
 
 export default Hashtag;
