@@ -144,8 +144,8 @@ const Signup = () => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps((context) => {
-  const cookie = context.req.headers.cookie;
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+  const cookie = context.req ? context.req.headers.cookie : '';
   axios.defaults.headers.Cookie = '';
   if (context.req && cookie) {
     axios.defaults.headers.Cookie = cookie;
@@ -156,7 +156,7 @@ export const getServerSideProps = wrapper.getServerSideProps((context) => {
   });
 
   context.store.dispatch(END);
-  context.store.sagaTask.toPromise();
+  await context.store.sagaTask.toPromise();
 });
 
 export default Signup;

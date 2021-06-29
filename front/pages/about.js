@@ -24,12 +24,12 @@ const About = () => {
               <br />
               {userInfo.Posts}
             </div>,
-            <div key='followings'>
+            <div key='following'>
               팔로잉
               <br />
               {userInfo.Followings}
             </div>,
-            <div key='followers'>
+            <div key='follower'>
               팔로워
               <br />
               {userInfo.Followers}
@@ -47,6 +47,7 @@ const About = () => {
   );
 };
 
+// getStaticProps: 미리 HTML 문서로 만들어 놓음
 export const getStaticProps = wrapper.getStaticProps(async (context) => {
   context.store.dispatch({
     type: LOAD_USER_INFO_REQUEST,
