@@ -10,12 +10,15 @@ import {
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
+import dayjs from 'dayjs';
 
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import FollowButton from './FollowButton';
 import { removePost, RETWEET_POST_REQUEST, LIKE_POST_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
+
+// dayjs.locale('ko');
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
@@ -108,29 +111,35 @@ const PostCard = ({ post }) => {
         title={post.content === 'retweet' ? `${post.User.nickname}님이 리트윗 하였습니다.` : null}
         extra={user && <FollowButton post={post} />}
       > {post.content === 'retweet' && post.Retweet ? (
-        <Card
-          cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}
-        >
+        <>
+          <Card
+            cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}
+          >
+            <div style={{ float: 'right' }}>{dayjs().format('YYYY-MM-DD')}</div>
+            <Card.Meta
+              avatar={(
+                <Link href={`/user/${post.Retweet.User.id}`}>
+                  <a><Avatar>{post.Retweet.User.nickname[0]}</Avatar></a>
+                </Link>
+              )}
+              title={post.Retweet.User.nickname}
+              description={<PostCardContent postData={post.Retweet.content} />} 
+            />
+          </Card> 
+        </>
+      ) : (
+        <>
+          <div style={{ float: 'right' }}>{dayjs().format('YYYY-MM-DD')}</div>
           <Card.Meta
             avatar={(
-              <Link href={`/user/${post.Retweet.User.id}`}>
-                <a><Avatar>{post.Retweet.User.nickname[0]}</Avatar></a>
+              <Link href={`/user/${post.User.id}`}>
+                <a><Avatar>{post.User.nickname[0]}</Avatar></a>
               </Link>
             )}
-            title={post.Retweet.User.nickname}
-            description={<PostCardContent postData={post.Retweet.content} />} 
+            title={post.User.nickname}
+            description={<PostCardContent postData={post.content} />}
           />
-        </Card> 
-      ) : (
-        <Card.Meta
-          avatar={(
-            <Link href={`/user/${post.User.id}`}>
-              <a><Avatar>{post.User.nickname[0]}</Avatar></a>
-            </Link>
-          )}
-          title={post.User.nickname}
-          description={<PostCardContent postData={post.content} />}
-        />
+        </>
       )}
     </Card>
       {commentFormOpened && (
