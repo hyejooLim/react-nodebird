@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, Popover, Avatar, List, Comment } from 'antd';
+import { Button, Card, Popover, Avatar, List, Comment, Form, Input } from 'antd';
 import {
   RetweetOutlined,
   HeartTwoTone,
@@ -16,16 +16,20 @@ import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import FollowButton from './FollowButton';
-import { removePost, RETWEET_POST_REQUEST, LIKE_POST_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
-
-// dayjs.locale('ko');
+import useInput from '../hooks/useInput';
+import { 
+  removePost, RETWEET_POST_REQUEST, LIKE_POST_REQUEST, 
+  UNLIKE_POST_REQUEST, UPDATE_POST_REQUEST 
+} from '../reducers/post';
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
   const [commentFormOpened, setCommentFormOpened] = useState(false);
+  const [updatePost, setUpdatePost] = useState(false);
+  const [postText, onChangePostText] = useInput(post.content);
 
   const id = useSelector((state) => state.user.user?.id); // optional chaining operator
-  const { removePostLoading } = useSelector((state) => state.post);
+  const { removePostLoading, updatePostLoading } = useSelector((state) => state.post);
   const { user } = useSelector((state) => state.user);
   const liked = post.Likers.find((v) => v.id === id);
 
@@ -67,6 +71,21 @@ const PostCard = ({ post }) => {
     setCommentFormOpened((prev) => !prev);
   }, [user]);
 
+  const onUpdatePost = useCallback(() => {
+    if (!user) {
+      alert('로그인이 필요합니다.')
+    }
+    
+    if (updatePost && postText) { // 수정한 글 올리기
+      dispatch({
+        type: UPDATE_POST_REQUEST,
+        data: { postId: post.id, content: postText }
+      });
+      console.log(postText);
+    }
+    setUpdatePost((prev) => !prev);
+  }, [updatePost, postText]);
+
   const onRemovePost = useCallback(() => {
     if (!user) {
       alert('로그인이 필요합니다.')
@@ -96,7 +115,7 @@ const PostCard = ({ post }) => {
               <Button.Group>
                 {id && post.User.id === id ? (
                   <>
-                    <Button>수정</Button>
+                    <Button onClick={onUpdatePost} loading={updatePostLoading}>{updatePost ? '완료' : '수정'}</Button>
                     <Button type='danger' onClick={onRemovePost} loading={removePostLoading}>삭제</Button>
                   </>
                 ) : (
@@ -111,11 +130,10 @@ const PostCard = ({ post }) => {
         title={post.content === 'retweet' ? `${post.User.nickname}님이 리트윗 하였습니다.` : null}
         extra={user && <FollowButton post={post} />}
       > {post.content === 'retweet' && post.Retweet ? (
-        <>
           <Card
             cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}
           >
-            <div style={{ float: 'right' }}>{dayjs().format('YYYY-MM-DD')}</div>
+            <div style={{ float: 'right' }}>{dayjs(post.createdAt).format('YYYY년 MM월 DD일')}</div>
             <Card.Meta
               avatar={(
                 <Link href={`/user/${post.Retweet.User.id}`}>
@@ -125,11 +143,24 @@ const PostCard = ({ post }) => {
               title={post.Retweet.User.nickname}
               description={<PostCardContent postData={post.Retweet.content} />} 
             />
-          </Card> 
-        </>
+          </Card>
       ) : (
+        updatePost ? (
+          <Form
+          style={{ margin: '30px 0' }}
+          //encType='multipart/form-data'
+          //onFinish={onSubmitForm}
+        >
+          <Input.TextArea
+            value={postText}
+            onChange={onChangePostText}
+            maxLength={140}
+            style={{ height: '100px', fontFamily: 'menlo' }}
+          />
+          </Form>
+        ) : (
         <>
-          <div style={{ float: 'right' }}>{dayjs().format('YYYY-MM-DD')}</div>
+          <div style={{ float: 'right' }}>{dayjs(post.createdAt).format('YYYY년 MM월 DD일')}</div>
           <Card.Meta
             avatar={(
               <Link href={`/user/${post.User.id}`}>
@@ -140,6 +171,7 @@ const PostCard = ({ post }) => {
             description={<PostCardContent postData={post.content} />}
           />
         </>
+      )
       )}
     </Card>
       {commentFormOpened && (
@@ -180,6 +212,9 @@ PostCard.propTypes = {
     Images: PropTypes.arrayOf(PropTypes.object),
     Comments: PropTypes.arrayOf(PropTypes.object),
     imagePaths: PropTypes.arrayOf(PropTypes.object),
+    Likers: PropTypes.arrayOf(PropTypes.object),
+    RetweetId: PropTypes.number,
+    Retweet: PropTypes.objectOf(PropTypes.any),
   }).isRequired,
 };
 

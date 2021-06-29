@@ -176,6 +176,21 @@ router.post('/:postId/retweet', isLoggedIn, async (req, res, next) => { // POST 
   }
 });
 
+router.patch('/:postId/update', isLoggedIn,  async (req, res, next) => { // PATCH /post/${postId}/update
+  try {
+    await Post.update({
+      content: req.body.content
+    }, { 
+      where: { id: parseInt(req.params.postId, 10) } 
+    });
+
+    res.status(200).json({ PostId: parseInt(req.params.postId, 10), Content: req.body.content });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 router.patch('/:postId/like', isLoggedIn, async (req, res, next) => { // PATCH /post/${postId}/like
   try {
     const post = await Post.findOne({
