@@ -37,14 +37,13 @@ const Profile = () => {
   }, []);
 
   if (!user) {
-    return null;
+    return <div>내 정보 로딩 중 ...</div>;
   }
 
   if (followerError || followingError) {
-    console.error(followerError || followingError);
-    return <div>팔로워/팔로잉 로드 중 에러가 발생하였습니다.</div>;
+    return <div>팔로워/팔로잉 로드 실패하였습니다.</div>;
   }
-
+  
   return (
     <>
       <Head>
