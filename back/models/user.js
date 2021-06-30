@@ -8,11 +8,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING(100),
-      allowNull: false, // 필수
+      allowNull: false,
     },
     nickname: {
       type: DataTypes.STRING(30),
-      allowNull: false, // 필수
+      allowNull: false,
     }
   }, {
     charset: 'utf8',
@@ -23,8 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     db.User.hasMany(db.Post);
     db.User.hasMany(db.Comment);
     db.User.belongsToMany(db.Post, { through: 'Like', as: 'Liked' });
-    db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followers', foreignKey: 'FollowingId' });
-    db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followings', foreignKey: 'FollowerId' });
+    db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followers', foreignKey: 'FollowingId' }); // user.addFollowers
+    db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followings', foreignKey: 'FollowerId' }); // user.addFollowings
   };
   return User;
 };
