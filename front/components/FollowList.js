@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { List, Button, Card } from 'antd';
 import { StopOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -34,7 +34,7 @@ const FollowList = ({ header, data, onClickMore, loading }) => {
       size='small'
       header={<div>{header}</div>}
       loadMore={
-        <div style={{ textAlign: 'center', margin: '10px 0' }}>
+        <div style={{ textAlign: 'center', marginBottom: '10px' }}>
           <Button onClick={onClickMore} loading={loading}>
             더 보기
           </Button>

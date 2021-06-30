@@ -1,15 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
 import { Form, Input } from 'antd';
-import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
 import useInput from '../hooks/useInput';
 import { CHANGE_NICKNAME_REQUEST } from '../reducers/user';
-
-const FormWrapper = styled(Form)`
-  margin: 30px 0;
-  color: #bfbfbf;
-`;
 
 const NicknameEditForm = () => {
   const dispatch = useDispatch();
@@ -30,7 +24,7 @@ const NicknameEditForm = () => {
   }, [nickname]);
 
   return (
-    <FormWrapper>
+    <Form>
       <Input.Search
         value={nickname}
         onChange={onChangeNickname}
@@ -38,7 +32,7 @@ const NicknameEditForm = () => {
         enterButton='수정'
         onSearch={onSubmitForm}
       />
-    </FormWrapper>
+    </Form>
   );
 };
 

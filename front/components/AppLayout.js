@@ -18,6 +18,7 @@ const MenuWrapper = styled(Menu)`
   font-size: 16px;
   font-weight: 600;
   height: 56px;
+  margin-bottom: 100px;
 
   .icon {
     display: inline-block;
@@ -70,8 +71,8 @@ const AppLayout = ({ children }) => {
           md: 작은 데스크탑
           gutter: 컬럼 사이의 간격
       */}
-      <Row gutter={120}>
-        <Col xs={16} md={7}>
+      <Row gutter={160}>
+        <Col xs={16} md={8}>
           {user ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={16} md={13}>{children}</Col>

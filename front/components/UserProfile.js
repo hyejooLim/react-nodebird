@@ -7,8 +7,11 @@ import Link from 'next/link';
 import { logoutRequestAction } from '../reducers/user';
 
 const CardWrapper = styled(Card)`
+  width: 350px;
   text-align: center;
-  margin: 50px 0 0 50px;
+  margin-left: 70px;
+  padding: 16px 30px;
+  background: #D0E4E0;
   box-shadow: 10px 8px 10px -2px rgba(0,0,0,0.29);
   -webkit-box-shadow: 10px 8px 10px -2px rgba(0,0,0,0.29);
   -moz-box-shadow: 10px 8px 10px -2px rgba(0,0,0,0.29);
@@ -40,7 +43,7 @@ const UserProfile = () => {
           </Link>
         )}
         title={user.nickname}
-        description='Happy Day'
+        description='🌈 Happy Day 🌈'
       />
       <ButtonWrapper onClick={onLogOut} loading={logOutLoading}>로그아웃</ButtonWrapper>
     </CardWrapper>

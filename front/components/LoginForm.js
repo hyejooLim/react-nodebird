@@ -12,8 +12,11 @@ const ButtonWrapper = styled.div`
 `;
 
 const FormWrapper = styled(Form)`
-  margin: 50px 0 0 50px;
+  margin-left: 70px;
   font-family: 'menlo';
+  padding: 40px 50px;
+  width: 350px;
+  background: #D0E4E0;
 `;
 
 const EmailWrapper = styled.div`

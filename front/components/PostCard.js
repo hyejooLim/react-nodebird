@@ -93,7 +93,7 @@ const PostCard = ({ post }) => {
   }, [user]);
 
   return (
-    <div style={{ marginTop: '50px' }}>
+    <div style={{ marginBottom: '40px' }}>
       <Card
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
@@ -145,15 +145,13 @@ const PostCard = ({ post }) => {
           </Card>
       ) : (
         updateButtonClicked ? (
-          <Form
-          //style={{ margin: '30px 0' }}
-        >
-          <Input.TextArea
-            value={postText}
-            onChange={onChangePostText}
-            maxLength={140}
-            style={{ height: '100px' }}
-          />
+          <Form>
+            <Input.TextArea
+              value={postText}
+              onChange={onChangePostText}
+              maxLength={140}
+              style={{ height: '100px' }}
+            />
           </Form>
         ) : (
         <>

@@ -13,8 +13,6 @@ import { LOAD_MY_INFO_REQUEST, SIGN_UP_REQUEST } from '../reducers/user';
 import wrapper from '../store/configureStore';
 
 const FormWrapper = styled(Form)`
-  margin-top: 35px;
-
   .input_form {
     margin-bottom: 20px;
     font-family: 'menlo';
@@ -25,6 +23,7 @@ const FormWrapper = styled(Form)`
 
 const InputWrapper = styled(Input)`
   width: 600px;
+  height: 38px;
 `;
 
 const ErrorMessage = styled.div`
@@ -144,7 +143,7 @@ const Signup = () => {
             <ErrorMessage>약관에 동의하지 않았습니다.</ErrorMessage>
           )}
         </div>
-        <Button type='primary' htmlType='submit' loading={signUpLoading} style={{ marginTop: 20 }}>
+        <Button htmlType='submit' loading={signUpLoading} style={{ marginTop: 20, background: '#BBD2CC' }}>
           가입하기
         </Button>
       </FormWrapper>
