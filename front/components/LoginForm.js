@@ -14,9 +14,12 @@ const ButtonWrapper = styled.div`
 const FormWrapper = styled(Form)`
   margin-left: 70px;
   font-family: 'menlo';
-  padding: 40px 50px;
+  padding: 30px 50px;
   width: 350px;
-  background: #D0E4E0;
+  background: #fff;
+  box-shadow: 10px 8px 10px -2px rgba(0,0,0,0.29);
+  -webkit-box-shadow: 10px 8px 10px -2px rgba(0,0,0,0.29);
+  -moz-box-shadow: 10px 8px 10px -2px rgba(0,0,0,0.29);
 `;
 
 const EmailWrapper = styled.div`
@@ -37,7 +40,6 @@ const LoginForm = () => {
 
   // onFinish already has 'e.preventDefault'
   const onSubmitForm = useCallback(() => {
-    console.log(email, password);
     dispatch(loginRequestAction({ email, password }));
   }, [email, password]);
 
@@ -54,6 +56,7 @@ const LoginForm = () => {
             onChange={onChangeEmail}
             placeholder='email'
             required
+            style={{ height: '40px' }}
           />
         </EmailWrapper>
         <div>
@@ -66,6 +69,7 @@ const LoginForm = () => {
             onChange={onChangePassword}
             placeholder="password"
             required
+            style={{ height: '40px' }}
           />
         </div>
         <ButtonWrapper>

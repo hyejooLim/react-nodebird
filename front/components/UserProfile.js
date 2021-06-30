@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Card, Avatar, Button } from 'antd';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,8 +10,8 @@ const CardWrapper = styled(Card)`
   width: 350px;
   text-align: center;
   margin-left: 70px;
-  padding: 16px 30px;
-  background: #D0E4E0;
+  padding: 15px 30px;
+  background: #fff;
   box-shadow: 10px 8px 10px -2px rgba(0,0,0,0.29);
   -webkit-box-shadow: 10px 8px 10px -2px rgba(0,0,0,0.29);
   -moz-box-shadow: 10px 8px 10px -2px rgba(0,0,0,0.29);
@@ -22,12 +22,13 @@ const ButtonWrapper = styled(Button)`
 `;
 
 const UserProfile = () => {
-  const { user, logOutLoading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const { user, logOutLoading } = useSelector((state) => state.user);
+
   const onLogOut = useCallback(() => {
     dispatch(logoutRequestAction());
   }, []);
-
+  
   return (
     <CardWrapper
       actions={[

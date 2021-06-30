@@ -37,10 +37,10 @@ const Profile = () => {
   }, []);
 
   if (!user) {
-    return <div>내 정보 로딩 중 ...</div>;
+    return <div>홈 화면으로 이동 중...</div>;
   }
 
-  if (followerError || followingError) {
+  if (followingError || followerError) {
     return <div>팔로워/팔로잉 로드 실패하였습니다.</div>;
   }
   
@@ -51,8 +51,18 @@ const Profile = () => {
       </Head>
       <AppLayout>
         <NicknameEditForm />
-        <FollowList header='팔로잉 목록' data={followingsData} onClickMore={onLoadFollowings} loading={!followingsData && !followingError} />
-        <FollowList header='팔로워 목록' data={followersData} onClickMore={onLoadFollowers} loading={!followersData && !followerError} />
+        <FollowList 
+          header='팔로잉 목록' 
+          data={followingsData} 
+          onClickMore={onLoadFollowings} 
+          loading={!followingsData && !followingError} 
+        />
+        <FollowList 
+          header='팔로워 목록' 
+          data={followersData} 
+          onClickMore={onLoadFollowers} 
+          loading={!followersData && !followerError} 
+        />
       </AppLayout>
     </>
   );
