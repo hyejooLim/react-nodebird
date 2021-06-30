@@ -73,7 +73,7 @@ router.get('/:userId', async (req, res, next) => { // GET /user/${userId}
     const fullUserInfo = await User.findOne({
       where: { id: req.params.userId },
       attributes: {
-        exclude: ['password'] // password는 제외
+        exclude: ['password']
       },
       include: [{
         model: Post,
@@ -95,7 +95,6 @@ router.get('/:userId', async (req, res, next) => { // GET /user/${userId}
       data.Followers = data.Followers.length;
       data.Followings = data.Followings.length;
       res.status(200).json(data);
-      console.log(`userInfo.id! ${data.id} userInfo.nickname! ${data.nickname} userInfo.Followers! ${data.Followers}`);
     } else {
       res.status(404).send('존재하지 않는 사용자입니다.');
     }
@@ -169,7 +168,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
       const fullUserWithoutPassword = await User.findOne({
         where: { id: user.id },
         attributes: {
-          exclude: ['password'] // password는 제외
+          exclude: ['password']
         },
         include: [{
           model: Post,
@@ -241,7 +240,10 @@ router.patch('/:userId/follow', isLoggedIn, async (req, res, next) => { // PATCH
       where: { id: req.params.userId } 
     });
     if (!user) {
-      return res.status(403).send('없는 사용자 입니다.');
+      return res.status(403).send('존재하지 않는 사용자 입니다.');
+    }
+    if (req.user.id === user.id) {
+      return res.status(403).send('자신은 팔로우할 수 없습니다.');
     }
     await user.addFollowers(req.user.id);
 
@@ -258,7 +260,7 @@ router.delete('/:userId/unfollow', isLoggedIn, async (req, res, next) => { // DE
       where: { id: req.params.userId } 
     });
     if (!user) {
-      return res.status(403).send('없는 사용자 입니다.');
+      return res.status(403).send('존재하지 않는 사용자 입니다.');
     }
     await user.removeFollowers(req.user.id);
 
@@ -275,7 +277,7 @@ router.delete('/:userId/follower', async (req, res, next) => { // DELETE /user/$
       where: { id: req.params.userId }
     });
     if (!user) {
-      return res.status(403).send('없는 사용자 입니다.');
+      return res.status(403).send('존재하지 않는 사용자 입니다.');
     }
     await user.removeFollowings(req.user.id);
     res.status(200).json({ UserId: parseInt(req.params.userId, 10) });

@@ -12,7 +12,7 @@ import wrapper from '../store/configureStore';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
+  const { user, followError } = useSelector((state) => state.user);
   const { mainPosts, hasMorePosts, loadPostsLoading, retweetPostError } = useSelector((state) => state.post);
 
   useEffect(() => {
@@ -20,6 +20,12 @@ const Home = () => {
       alert(retweetPostError);
     }
   }, [retweetPostError]);
+
+  useEffect(() => {
+    if (followError) {
+      alert(followError);
+    }
+  }, [followError]);
 
   useEffect(() => {
     function onScroll() {
