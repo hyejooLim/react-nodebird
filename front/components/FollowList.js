@@ -9,6 +9,7 @@ import { UNFOLLOW_REQUEST, BLOCK_FOLLOWER_REQUEST } from '../reducers/user';
 
 const ListWrapper = styled(List)`
   margin: 20px 0;
+  background: #F2F2F2;
 `;
 
 const FollowList = ({ header, data, onClickMore, loading }) => {
@@ -45,6 +46,7 @@ const FollowList = ({ header, data, onClickMore, loading }) => {
         <List.Item>
           <Card
             actions={[<StopOutlined key='stop' onClick={onCancel(item.id)} />]}
+            style={{ marginLeft: '20px', marginTop: '20px', width: '100px', textAlign: 'center', background: '#92C4B7' }}
           >
             <Card.Meta description={item.nickname} />
           </Card>

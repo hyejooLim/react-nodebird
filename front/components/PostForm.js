@@ -61,7 +61,7 @@ const PostForm = () => {
 
   return (
     <Form
-      style={{ margin: '30px 0' }}
+      style={{ margin: '50px 0' }}
       encType='multipart/form-data'
       onFinish={onSubmitForm}
     >
@@ -70,7 +70,7 @@ const PostForm = () => {
         onChange={onChangePostText}
         maxLength={140}
         placeholder='오늘은 어떤 일이 있었나요?'
-        style={{ height: '100px', fontFamily: 'menlo' }}
+        style={{ height: '100px' }}
       />
       <ButtonWrapper>
         <input type='file' name='image' multiple hidden ref={imageInput} onChange={onChangeImages} />

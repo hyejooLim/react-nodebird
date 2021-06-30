@@ -12,7 +12,7 @@ const ButtonWrapper = styled.div`
 `;
 
 const FormWrapper = styled(Form)`
-  padding: 20px 15px;
+  margin: 50px 0 0 50px;
   font-family: 'menlo';
 `;
 

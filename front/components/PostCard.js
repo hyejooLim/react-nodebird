@@ -81,7 +81,6 @@ const PostCard = ({ post }) => {
         type: UPDATE_POST_REQUEST,
         data: { postId: post.id, content: postText }
       });
-      console.log(postText);
     }
     setUpdatePost((prev) => !prev);
   }, [updatePost, postText]);
@@ -94,7 +93,7 @@ const PostCard = ({ post }) => {
   }, [user]);
 
   return (
-    <div style={{ marginBottom: '20px' }}>
+    <div style={{ marginTop: '50px' }}>
       <Card
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
@@ -147,15 +146,13 @@ const PostCard = ({ post }) => {
       ) : (
         updatePost ? (
           <Form
-          style={{ margin: '30px 0' }}
-          //encType='multipart/form-data'
-          //onFinish={onSubmitForm}
+          //style={{ margin: '30px 0' }}
         >
           <Input.TextArea
             value={postText}
             onChange={onChangePostText}
             maxLength={140}
-            style={{ height: '100px', fontFamily: 'menlo' }}
+            style={{ height: '100px' }}
           />
           </Form>
         ) : (

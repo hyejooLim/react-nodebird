@@ -12,13 +12,28 @@ import useInput from '../hooks/useInput';
 import { LOAD_MY_INFO_REQUEST, SIGN_UP_REQUEST } from '../reducers/user';
 import wrapper from '../store/configureStore';
 
+const FormWrapper = styled(Form)`
+  margin-top: 35px;
+
+  .input_form {
+    margin-bottom: 20px;
+    font-family: 'menlo';
+    font-size: 16px;
+    font-weight: 100;
+  }
+`;
+
+const InputWrapper = styled(Input)`
+  width: 600px;
+`;
+
 const ErrorMessage = styled.div`
   color: red;
 `;
 
 const Signup = () => {
   const dispatch = useDispatch();
-  const { signUpLoading, signUpDone, signUpError, user } = useSelector((state) => state.user);
+  const { signUpLoading, signUpDone, signUpError } = useSelector((state) => state.user);
 
   const [email, onChangeEmail] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
@@ -28,12 +43,6 @@ const Signup = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [term, setTerm] = useState('');
   const [termError, setTermError] = useState(false);
-
-  useEffect(() => {
-    if (user && user.id) {
-      Router.replace('/');
-    }
-  }, [user && user.id]);
 
   useEffect(() => {
     if (signUpDone) {
@@ -68,8 +77,7 @@ const Signup = () => {
     if (!term) {
       return setTermError(true);
     }
-    // Signup successful
-    console.log(email, nickname, password);
+    
     dispatch({
       type: SIGN_UP_REQUEST,
       data: { email, password, nickname }
@@ -81,11 +89,11 @@ const Signup = () => {
       <Head>
         <title>NodeBird | 회원가입</title>
       </Head>
-      <Form onFinish={onSubmitForm}>
-        <div>
-          <label htmlFor='user-email'>이메일</label>
+      <FormWrapper onFinish={onSubmitForm}>
+        <div className="input_form">
+          <label htmlFor='user-email'>Email</label>
           <br />
-          <Input
+          <InputWrapper
             name='user-email'
             value={email}
             type='email'
@@ -93,20 +101,20 @@ const Signup = () => {
             onChange={onChangeEmail}
           />
         </div>
-        <div>
-          <label htmlFor='user-nickname'>닉네임</label>
+        <div className="input_form">
+          <label htmlFor='user-nickname'>Nickname</label>
           <br />
-          <Input
+          <InputWrapper
             name='user-nickname'
             value={nickname}
             required
             onChange={onChangeNickname}
           />
         </div>
-        <div>
-          <label htmlFor='user-password'>비밀번호</label>
+        <div className="input_form">
+          <label htmlFor='user-password'>Password</label>
           <br />
-          <Input
+          <InputWrapper
             name='user-password'
             value={password}
             type='password'
@@ -114,10 +122,10 @@ const Signup = () => {
             onChange={onChangePassword}
           />
         </div>
-        <div>
-          <label htmlFor='user-password-check'>비밀번호 확인</label>
+        <div className="input_form">
+          <label htmlFor='user-password-check'>Password Check</label>
           <br />
-          <Input
+          <InputWrapper
             name='user-password-check'
             value={passwordCheck}
             type='password'
@@ -128,7 +136,7 @@ const Signup = () => {
             <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
           )}
         </div>
-        <div>
+        <div className="input_form">
           <Checkbox name='user-term' checked={term} onChange={onChangeTerm}>
             약관에 동의합니다.
           </Checkbox>
@@ -139,7 +147,7 @@ const Signup = () => {
         <Button type='primary' htmlType='submit' loading={signUpLoading} style={{ marginTop: 20 }}>
           가입하기
         </Button>
-      </Form>
+      </FormWrapper>
     </AppLayout>
   );
 };

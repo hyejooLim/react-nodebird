@@ -4,10 +4,29 @@ import { Menu, Input, Row, Col } from 'antd';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import Router from 'next/router';
+import { FaEarlybirds } from 'react-icons/fa';
+import { ImProfile } from 'react-icons/im';
+import { BiRocket } from 'react-icons/bi';
 
 import LoginForm from '../components/LoginForm';
 import UserProfile from '../components/UserProfile';
 import useInput from '../hooks/useInput';
+
+const MenuWrapper = styled(Menu)`
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 600;
+  height: 56px;
+
+  .icon {
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 24px;
+    position: relative;
+    top: 5px;
+  }
+`;
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
@@ -23,12 +42,14 @@ const AppLayout = ({ children }) => {
 
   return (
     <div>
-      <Menu mode='horizontal'>
+      <MenuWrapper mode='horizontal'>
         <Menu.Item>
-          <Link href='/'><a>노드버드</a></Link>
+          <div className="icon"><FaEarlybirds /></div>
+          <Link href='/'><a>NodeBird</a></Link>
         </Menu.Item>
         <Menu.Item>
-          <Link href='/profile'><a>프로필</a></Link>
+          <div className="icon"><ImProfile /></div>
+          <Link href='/profile'><a>Profile</a></Link>
         </Menu.Item>
         <Menu.Item>
           <SearchInput 
@@ -36,25 +57,27 @@ const AppLayout = ({ children }) => {
             value={searchInput}
             onChange={onChangeSearchInput}
             onSearch={onSearch} 
+            style={{ width: '500px' }}
             />
         </Menu.Item>
         <Menu.Item>
-          <Link href='/signup'><a>회원가입</a></Link>
+          <div className="icon"><BiRocket /></div>
+          <Link href='/signup'><a>Signup</a></Link>
         </Menu.Item>
-      </Menu>
+      </MenuWrapper>
       {/* xs: 모바일
           sm: 태블릿
           md: 작은 데스크탑
           gutter: 컬럼 사이의 간격
       */}
-      <Row gutter={30}>
-        <Col xs={24} md={6}>
+      <Row gutter={120}>
+        <Col xs={16} md={7}>
           {user ? <UserProfile /> : <LoginForm />}
         </Col>
-        <Col xs={24} md={12}>{children}</Col>
-        <Col xs={24} md={6}>
+        <Col xs={16} md={13}>{children}</Col>
+        {/* <Col xs={24} md={6}>
           <a href="https://cherishvert.tistory.com" target="_blank" rel="noreferrer noopener">Made by Me</a>
-        </Col>
+        </Col> */}
       </Row>
     </div>
   );

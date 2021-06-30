@@ -8,6 +8,10 @@ import { logoutRequestAction } from '../reducers/user';
 
 const CardWrapper = styled(Card)`
   text-align: center;
+  margin: 50px 0 0 50px;
+  box-shadow: 10px 8px 10px -2px rgba(0,0,0,0.29);
+  -webkit-box-shadow: 10px 8px 10px -2px rgba(0,0,0,0.29);
+  -moz-box-shadow: 10px 8px 10px -2px rgba(0,0,0,0.29);
 `;
 
 const ButtonWrapper = styled(Button)`
@@ -24,9 +28,9 @@ const UserProfile = () => {
   return (
     <CardWrapper
       actions={[
-        <Link href={`/user/${user.id}`}><a><div key='twit'>게시물<br />{user.Posts.length}</div></a></Link>,
-        <Link href='/profile'><a><div key='followings'>팔로잉<br />{user.Followings.length}</div></a></Link>,
-        <Link href='/profile'><a><div key='followers'>팔로워<br />{user.Followers.length}</div></a></Link>,
+        <div key='twit'><Link href={`/user/${user.id}`}><a>게시물<br />{user.Posts.length}</a></Link></div>,
+        <div key='followings'><Link href='/profile'><a> 팔로잉<br />{user.Followings.length}</a></Link></div>,
+        <div key='followers'><Link href='/profile'><a>팔로워<br />{user.Followers.length}</a></Link></div>,
       ]}
     >
       <Card.Meta
