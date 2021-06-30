@@ -25,7 +25,7 @@ import {
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
   const [commentFormOpened, setCommentFormOpened] = useState(false);
-  const [updatePost, setUpdatePost] = useState(false);
+  const [updateButtonClicked, setUpdateButtonClicked] = useState(false);
   const [postText, onChangePostText] = useInput(post.content);
 
   const id = useSelector((state) => state.user.user?.id); // optional chaining operator
@@ -76,14 +76,14 @@ const PostCard = ({ post }) => {
       alert('로그인이 필요합니다.')
     }
     
-    if (updatePost && postText) { // 수정한 글 올리기
+    if (updateButtonClicked && postText) { // 수정한 글 올리기
       dispatch({
         type: UPDATE_POST_REQUEST,
         data: { postId: post.id, content: postText }
       });
     }
-    setUpdatePost((prev) => !prev);
-  }, [updatePost, postText]);
+    setUpdateButtonClicked((prev) => !prev);
+  }, [updateButtonClicked, postText]);
 
   const onRemovePost = useCallback(() => {
     if (!user) {
@@ -114,7 +114,7 @@ const PostCard = ({ post }) => {
               <Button.Group>
                 {id && post.User.id === id ? (
                   <>
-                    <Button onClick={onUpdatePost} loading={updatePostLoading}>{updatePost ? '완료' : '수정'}</Button>
+                    <Button onClick={onUpdatePost} loading={updatePostLoading}>{updateButtonClicked ? '완료' : '수정'}</Button>
                     <Button type='danger' onClick={onRemovePost} loading={removePostLoading}>삭제</Button>
                   </>
                 ) : (
@@ -144,7 +144,7 @@ const PostCard = ({ post }) => {
             />
           </Card>
       ) : (
-        updatePost ? (
+        updateButtonClicked ? (
           <Form
           //style={{ margin: '30px 0' }}
         >
