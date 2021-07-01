@@ -1,12 +1,7 @@
 {
   "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-<<<<<<< HEAD
-  "/profile": "pages/profile.js",
-  "/": "pages/index.js"
-=======
+  "/_error": "pages/_error.js",
   "/": "pages/index.js",
-  "/profile": "pages/profile.js"
->>>>>>> 1a3873f
+  "/user/[id]": "pages/user/[id].js"
 }
