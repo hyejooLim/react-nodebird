@@ -71,6 +71,7 @@ const User = () => {
               {userInfo.Followers}
             </div>,
           ]}
+          style={{ marginBottom: '60px' }}
         >
           <Card.Meta
             avatar={<Avatar>{userInfo.nickname[0]}</Avatar>}
