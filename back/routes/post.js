@@ -124,7 +124,7 @@ router.post('/:postId/retweet', isLoggedIn, async (req, res, next) => { // POST 
       return res.status(403).send('존재하지 않는 게시글입니다.');
     }
     if (req.user.id === post.UserId || (post.Retweet && req.user.id === post.Retweet.UserId)) {
-      return res.status(403).send('본인의 글은 리트윗할 수 없습니다.');
+      return res.status(403).send('자신의 글은 리트윗할 수 없습니다.');
     }
     const retweetTargetId = post.RetweetId || post.id;
     const exRetweetPost = await Post.findOne({
@@ -177,13 +177,22 @@ router.post('/:postId/retweet', isLoggedIn, async (req, res, next) => { // POST 
 });
 
 router.patch('/:postId/update', isLoggedIn,  async (req, res, next) => { // PATCH /post/${postId}/update
+  const hashtags = req.body.content.match(/#[^\s#]+/g);
   try {
     await Post.update({
       content: req.body.content
     }, { 
       where: { id: parseInt(req.params.postId, 10) } 
     });
-
+    const post = await Post.findOne({
+      where: { id: req.params.postId }
+    });
+    if (hashtags) {
+      const hashtag = await Promise.all(hashtags.map((tag) => Hashtag.findOrCreate({ 
+        where: { name: tag.slice(1).toLowerCase() }
+      }))); // [리액트, true]
+      await post.setHashtags(hashtag.map((h) => h[0]));
+    }
     res.status(200).json({ PostId: parseInt(req.params.postId, 10), Content: req.body.content });
   } catch (error) {
     console.error(error);
