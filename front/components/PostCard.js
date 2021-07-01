@@ -113,8 +113,10 @@ const PostCard = ({ post }) => {
             content={
               <Button.Group>
                 {id && post.User.id === id ? (
-                  <>
+                  <> 
+                  {post.content !== 'retweet' && 
                     <Button onClick={onUpdatePost} loading={updatePostLoading}>{updateButtonClicked ? '완료' : '수정'}</Button>
+                  }        
                     <Button type='danger' onClick={onRemovePost} loading={removePostLoading}>삭제</Button>
                   </>
                 ) : (
@@ -145,14 +147,22 @@ const PostCard = ({ post }) => {
           </Card>
       ) : (
         updateButtonClicked ? (
-          <Form>
+          <>
+          <Card.Meta
+          avatar={(
+            <Link href={`/user/${post.User.id}`}>
+              <a><Avatar>{post.User.nickname[0]}</Avatar></a>
+            </Link>
+          )}
+          title={post.User.nickname}
+          />
             <Input.TextArea
               value={postText}
               onChange={onChangePostText}
               maxLength={140}
-              style={{ height: '100px' }}
+              style={{ height: '80px', marginTop: '10px' }}
             />
-          </Form>
+          </>
         ) : (
         <>
           <div style={{ float: 'right' }}>{dayjs(post.createdAt).format('YYYY년 MM월 DD일')}</div>
