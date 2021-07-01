@@ -189,7 +189,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
   })(req, res, next);
 });
 
-router.post('/', isNotLoggedIn, async (req, res, next) => { // POST /user
+router.post('/', async (req, res, next) => { // POST /user
   try {
     const exUser = await User.findOne({
       where: {
