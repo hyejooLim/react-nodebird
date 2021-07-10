@@ -16,6 +16,8 @@ const hashtagRouter = require('./routes/hashtag');
 const db = require('./models');
 const passportConfig = require('./passport');
 
+const app = express();
+
 // express에 sequelize 등록
 db.sequelize.sync()
   .then(() => {
@@ -34,8 +36,6 @@ if (process.env.NODE_ENV === 'production') {
   app.use(morgan('dev'));
 }
 
-const app = express();
-app.use(morgan('dev'));
 app.use(cors({
   origin: ['http://localhost:3060', 'http://52.79.157.220'],
   credentials: true
