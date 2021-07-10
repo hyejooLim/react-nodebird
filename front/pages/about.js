@@ -48,7 +48,7 @@ const About = () => {
 };
 
 // getStaticProps: 미리 HTML 문서로 만들어 놓음
-export const getStaticProps = wrapper.getStaticProps(async (context) => {
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
   context.store.dispatch({
     type: LOAD_USER_INFO_REQUEST,
     data: 1
