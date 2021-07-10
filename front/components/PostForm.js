@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import useInput from '../hooks/useInput';
 import { addPost } from '../reducers/post';
 import { UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE } from '../reducers/post';
+import { backUrl } from '../config/config';
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -83,7 +84,7 @@ const PostForm = () => {
         {imagePaths &&
           imagePaths.map((path, idx) => (
             <div key={path} style={{ display: 'inline-block' }}>
-              <img src={`http://localhost:3065/${path}`} style={{ width: '200px' }} alt={path} />
+              <img src={`${backUrl}/${path}`} style={{ width: '200px' }} alt={path} />
               <div>
                 <Button onClick={onRemoveImage(idx)}>업로드 취소</Button>
               </div>

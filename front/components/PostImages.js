@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { PlusOutlined } from '@ant-design/icons';
 
 import ImageZoom from './ImageZoom';
+import { backUrl } from '../config/config';
 
 const PostImages = ({ images }) => {
   const [imageZoom, setImageZoom] = useState(false);
@@ -19,7 +20,7 @@ const PostImages = ({ images }) => {
     return (
       <>
         <img
-          src={`http://localhost:3065/${images[0].src}`}
+          src={`${backUrl}/${images[0].src}`}
           alt={images[0].src}
           role='presentation'
           onClick={onZoom}
@@ -32,14 +33,14 @@ const PostImages = ({ images }) => {
     return (
       <>
         <img
-          src={`http://localhost:3065/${images[0].src}`}
+          src={`${backUrl}/${images[0].src}`}
           alt={images[0].src}
           role='presentation'
           onClick={onZoom}
           style={{ width: '50%', display: 'inline-block' }}
         />
         <img
-          src={`http://localhost:3065/${images[1].src}`}
+          src={`${backUrl}/${images[1].src}`}
           alt={images[1].src}
           role='presentation'
           onClick={onZoom}
@@ -53,7 +54,7 @@ const PostImages = ({ images }) => {
   return (
     <>
       <img
-        src={`http://localhost:3065/${images[0].src}`}
+        src={`${backUrl}/${images[0].src}`}
         alt={images[0].src}
         role='presentation'
         onClick={onZoom}
