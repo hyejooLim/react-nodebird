@@ -37,7 +37,7 @@ if (process.env.NODE_ENV === 'production') {
 const app = express();
 app.use(morgan('dev'));
 app.use(cors({
-  origin: true,
+  origin: ['http://localhost:3060', 'http://52.79.157.220'],
   credentials: true
 }));
 
