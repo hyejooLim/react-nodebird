@@ -32,14 +32,17 @@ if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'));
   app.use(hpp());
   app.use(helmet());
+  app.use(cors({
+    origin: 'http://52.79.157.220',
+    credentials: true
+  }));
 } else {
   app.use(morgan('dev'));
+  app.use(cors({
+    origin: true,
+    credentials: true
+  }));
 }
-
-app.use(cors({
-  origin: ['http://localhost:3060', 'http://52.79.157.220'],
-  credentials: true
-}));
 
 // req.body 안에 데이터 넣어줌
 app.use(express.json()); // json 형식으로 보낸 경우

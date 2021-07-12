@@ -1,1 +1,1 @@
-export const backUrl = 'http://52.78.197.99';
+export const backUrl = process.env.NODE_ENV === 'production' ? 'http://52.78.197.99' : 'http://localhost:3065';
