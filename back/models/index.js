@@ -9,6 +9,7 @@ const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config')[env];
 const db = {};
 
+// node와 mySQL이 연결되면 sequelize 객체에 연결 정보가 담겨있음
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 // 각 함수가 실행되고 sequelize에 모델 등록
