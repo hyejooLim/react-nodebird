@@ -1,14 +1,11 @@
 # 🐦 react-nodebird
 
+react-nodebird는 `React`, `Next.js` 프레임워크를 사용하여 만든 SNS 서비스입니다.
+
 </br>
 
-__••• 프로젝트에 관하여__
-
-`react-nodebird` 는 **ReactJS, NextJS** 프레임워크를 활용하여 만든 SNS로, Twitter와 유사한 SNS 서비스입니다.
-
-</br></br>
-
 ## 🌼 기술 스택
+
 </br>
 
 > ### Frontend
