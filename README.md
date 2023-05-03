@@ -13,10 +13,10 @@ react-nodebird는 `React`, `Next.js` 프레임워크를 사용하여 만든 SNS 
 * React Hooks
 * Redux
 * Redux saga
+* Next.js(SSR)
 * Ant Design
 * Styled Components
 * Immer
-* Next.js(SSR)
 
 </br>
 
