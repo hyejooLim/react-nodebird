@@ -16,12 +16,12 @@ react-nodebird는 `React`, `Next.js` 프레임워크를 사용하여 만든 SNS 
 * Ant Design
 * Styled Components
 * Immer
+* Next.js(SSR)
 
 </br>
 
 > ### Backend
-* Next.js(SSR)
-* Node
+* Node.js
 * Express
 * Sequelize(MySQL)
 * SWR
